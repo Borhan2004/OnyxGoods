@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sourcing fresh village milk from farmer families. Chilled at source, transported refrigerated over 250 KM, and delivered directly to your doorstep in Dhaka within 24 hours.">
+  <meta name="description" content="Gram Dudh sources fresh village milk from farmer families. Chilled at source, transported refrigerated 250 KM, delivered to your doorstep in Dhaka within 24 hours.">
   <title id="page-title">DudhWala | 250 KM Fresh Farm-to-Home Milk Delivery</title>
   <link rel="icon" type="image/png" href="logo.png">
-  
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <!-- ── NAV ── -->
   <nav id="navbar">
-    <a href="#" class="nav-logo" id="nav-logo-link" style="display: flex; align-items: center; gap: 8px;">
-      <img src="logo.png" alt="DudhWala Logo" style="height: 38px; border-radius: 6px;">
+    <a href="#" class="nav-logo" id="nav-logo-link">
+      <img src="logo.png" alt="DudhWala Logo" class="nav-logo-img">
       Dudh<span>Wala</span>
     </a>
     <ul class="nav-links" id="nav-menu">
@@ -24,7 +23,7 @@
       <li><a href="#process" id="link-process">Our Process</a></li>
       <li><a href="#testimonials" id="link-reviews">Reviews</a></li>
     </ul>
-    <div style="display: flex; align-items: center; gap: 15px;">
+    <div class="nav-actions">
       <button id="lang-switch" class="lang-btn">বাংলা</button>
       <a href="#order" class="nav-cta" id="nav-cta-btn">Order Now</a>
     </div>
@@ -32,89 +31,112 @@
 
   <!-- ── HERO ── -->
   <header class="hero" id="home">
-    <div class="hero-left reveal-left">
-      <div class="hero-badge" id="hero-badge-tag">100% Pure & Untouched</div>
+    <div class="hero-bg-blob blob-1"></div>
+    <div class="hero-bg-blob blob-2"></div>
+
+    <div class="hero-left">
+      <div class="hero-badge" id="hero-badge-tag">
+        <span class="badge-dot"></span>100% Pure &amp; Untouched
+      </div>
       <h1 id="hero-heading">250 KM Fresh <em>Farm-to-Home</em> Milk Delivery</h1>
       <p class="hero-sub" id="hero-subtitle">
         Collected today from trusted village farmer families, chilled immediately to lock in freshness, and transported 250 KM refrigerated to arrive at your doorstep tomorrow morning.
       </p>
       <div class="hero-actions">
-        <a href="#order" class="btn-primary" id="hero-primary-cta">Order Fresh Milk</a>
+        <a href="#order" class="btn-primary" id="hero-primary-cta">
+          <span>Order Fresh Milk</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
         <a href="#about" class="btn-outline" id="hero-secondary-cta">Why Our Milk Is Different</a>
       </div>
       <div class="hero-stats">
         <div class="stat-item" id="stat-distance">
-          <div class="stat-num">250+ KM</div>
+          <div class="stat-num">250+</div>
+          <div class="stat-unit">KM</div>
           <div class="stat-label">Refrigerated Transport</div>
         </div>
+        <div class="stat-divider"></div>
         <div class="stat-item" id="stat-farmers">
-          <div class="stat-num">15+ Families</div>
+          <div class="stat-num">15+</div>
+          <div class="stat-unit">Families</div>
           <div class="stat-label">Trusted Village Farmers</div>
         </div>
+        <div class="stat-divider"></div>
         <div class="stat-item" id="stat-delivery">
-          <div class="stat-num">24 Hrs</div>
+          <div class="stat-num">24</div>
+          <div class="stat-unit">Hrs</div>
           <div class="stat-label">Freshness Window</div>
         </div>
       </div>
     </div>
-    <div class="hero-right reveal-right" id="hero-visual">
-      <div class="hero-image-wrap">
-        <img src="images/hero_milk.png" alt="Fresh Farm Milk" class="hero-img">
-        <div class="hero-floating-card">
-          <span class="card-icon">🥛</span>
-          <div>
-            <h4 class="card-title">Pure Farm Milk</h4>
-            <p class="card-desc">Chilled to 4°C instantly</p>
-          </div>
+
+    <div class="hero-right" id="hero-visual">
+      <div class="hero-image-frame">
+        <img src="images/hero_milk.png" alt="Fresh farm milk in a glass bottle" class="hero-img">
+        <div class="hero-badge-float badge-float-top">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Quality Verified</span>
+        </div>
+        <div class="hero-badge-float badge-float-bottom">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          <span>Farm Fresh Daily</span>
         </div>
       </div>
-      <div class="hero-decoration"></div>
-      <div class="hero-decoration"></div>
-      <div class="leaf">🌿</div>
-      <div class="leaf">🍀</div>
+      <div class="hero-orb orb-1"></div>
+      <div class="hero-orb orb-2"></div>
+      <div class="floating-leaf leaf-1">🌿</div>
+      <div class="floating-leaf leaf-2">🍃</div>
     </div>
   </header>
 
-  <!-- ── WAVE DIVIDER ── -->
-  <div class="wave-divider">
-    <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0,32L80,42.7C160,53,320,75,480,74.7C640,75,800,53,960,42.7C1120,32,1280,32,1360,32L1440,32L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
-    </svg>
-  </div>
-
   <!-- ── TRUST STRIP ── -->
-  <section class="trust-strip" id="trust-strip-sec">
+  <div class="trust-strip" id="trust-strip-sec">
     <div class="trust-item" id="trust-item-fridge">
-      <span class="trust-icon">❄️</span>
+      <div class="trust-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M12 2l-4 4m4-4 4 4M12 22l-4-4m4 4 4-4"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
       <span id="txt-trust-fridge">250 KM Refrigerated Chain</span>
     </div>
+    <div class="trust-divider"></div>
     <div class="trust-item" id="trust-item-farmers">
-      <span class="trust-icon">👨‍🌾</span>
+      <div class="trust-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
       <span id="txt-trust-farmers">Direct Farmer Sourced</span>
     </div>
+    <div class="trust-divider"></div>
     <div class="trust-item" id="trust-item-testing">
-      <span class="trust-icon">🧪</span>
-      <span id="txt-trust-testing">Purity & Fat Checked</span>
+      <div class="trust-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v11m0 0H5l-2 4h18l-2-4h-4m-4 0v-0"/><polyline points="9 11 12 14 22 4"/></svg>
+      </div>
+      <span id="txt-trust-testing">Purity &amp; Fat Checked</span>
     </div>
+    <div class="trust-divider"></div>
     <div class="trust-item" id="trust-item-chemical">
-      <span class="trust-icon">🚫</span>
+      <div class="trust-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+      </div>
       <span id="txt-trust-chemical">Zero Water or Preservatives</span>
     </div>
-  </section>
+  </div>
 
-  <!-- ── ABOUT (TRUST SECTION) ── -->
+  <!-- ── ABOUT ── -->
   <section class="about" id="about">
     <div class="about-image-wrap reveal-left">
       <div class="about-img-container">
-        <img src="images/about_farm.png" alt="Scenic Village Milk Farm" class="about-img">
+        <img src="images/about_farm.png" alt="Scenic village dairy farm" class="about-img">
       </div>
       <div class="about-tag" id="about-badge-tag">
         <strong>100%</strong> Verified Village Sourced
       </div>
+      <div class="about-img-badge">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>15+ Farmer Families</span>
+      </div>
     </div>
     <div class="about-details reveal-right">
       <span class="section-label" id="lbl-why-us">Why Our Milk Is Different</span>
-      <h2 id="about-heading">Naturally Rich, Safely <em>Chilled</em> & Untouched</h2>
+      <h2 id="about-heading">Naturally Rich, Safely <em>Chilled</em> &amp; Untouched</h2>
       <p id="about-desc">
         Most commercial milk spends days traveling through middlemen, getting chemically treated or mixed in giant silos. We believe in preserving the traditional taste of pure village cow milk.
       </p>
@@ -125,59 +147,78 @@
         <li id="why-li-4">Transported 250 KM in specialized cold chains (under 4°C).</li>
         <li id="why-li-5">Delivered fresh to your doorstep within 24 hours of cow milking—no middlemen.</li>
       </ul>
-      <a href="#order" class="btn-primary" id="about-order-cta">Get Tomorrow's Milk</a>
+      <a href="#order" class="btn-primary" id="about-order-cta">
+        <span>Get Tomorrow's Milk</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
     </div>
   </section>
 
   <!-- ── PRODUCTS ── -->
   <section class="products" id="products">
-    <div class="section-header">
+    <div class="section-header reveal-fade">
       <span class="section-label" id="lbl-freshly-sourced">Freshly Sourced</span>
       <h2 id="products-heading">Our Small-Batch Products</h2>
+      <p class="section-sub">Every product is traceable to specific farmer families. Small-batch. Seasonal. Pure.</p>
     </div>
     <div class="products-grid" id="products-list">
-      
-      <!-- Product 1 -->
-      <article class="product-card reveal-scale" id="card-daily-milk">
-        <div class="product-img-wrap daily">
+
+      <article class="product-card reveal-scale" id="card-daily-milk" style="--card-delay: 0s">
+        <div class="product-img-wrap">
           <img src="images/daily_milk.png" alt="Daily Raw Cow Milk" class="product-img-pic">
+          <div class="product-badge">Best Seller</div>
         </div>
         <div class="product-body">
           <h3 class="product-name" id="prod-name-daily">Daily Raw Cow Milk</h3>
           <p class="product-desc" id="prod-desc-daily">Pure, raw, single-source cow milk chilled immediately. Rich in nutrients, ideal for families, boiling, and daily consumption.</p>
           <div class="product-footer">
-            <div class="price" id="prod-price-daily">80 ৳ <span id="prod-unit-daily">/ Liter</span></div>
-            <button class="add-btn" id="btn-select-daily-milk" onclick="selectProduct('Daily Raw Cow Milk')">Select</button>
+            <div class="price-wrap">
+              <div class="price" id="prod-price-daily">80 ৳</div>
+              <div class="price-unit" id="prod-unit-daily">/ Liter</div>
+            </div>
+            <button class="add-btn" id="btn-select-daily-milk" onclick="selectProduct('Daily Raw Cow Milk')">
+              Order Now
+            </button>
           </div>
         </div>
       </article>
- 
-      <!-- Product 2 -->
-      <article class="product-card reveal-scale" id="card-full-cream">
-        <div class="product-img-wrap full">
+
+      <article class="product-card reveal-scale" id="card-full-cream" style="--card-delay: 0.12s">
+        <div class="product-img-wrap">
           <img src="images/full_cream.png" alt="Full Cream Village Milk" class="product-img-pic">
+          <div class="product-badge premium">Premium</div>
         </div>
         <div class="product-body">
           <h3 class="product-name" id="prod-name-full">Full Cream Village Milk</h3>
           <p class="product-desc" id="prod-desc-full">Rich in cream and natural fats, sourced from cows raised on green grass. Perfect for making traditional sweets, ghee, and curd.</p>
           <div class="product-footer">
-            <div class="price" id="prod-price-full">95 ৳ <span id="prod-unit-full">/ Liter</span></div>
-            <button class="add-btn" id="btn-select-full-cream" onclick="selectProduct('Full Cream Village Milk')">Select</button>
+            <div class="price-wrap">
+              <div class="price" id="prod-price-full">95 ৳</div>
+              <div class="price-unit" id="prod-unit-full">/ Liter</div>
+            </div>
+            <button class="add-btn" id="btn-select-full-cream" onclick="selectProduct('Full Cream Village Milk')">
+              Order Now
+            </button>
           </div>
         </div>
       </article>
- 
-      <!-- Product 3 -->
-      <article class="product-card reveal-scale" id="card-ghee">
-        <div class="product-img-wrap ghee">
+
+      <article class="product-card reveal-scale" id="card-ghee" style="--card-delay: 0.24s">
+        <div class="product-img-wrap">
           <img src="images/premium_ghee.png" alt="Premium Village Cow Ghee" class="product-img-pic">
+          <div class="product-badge gold-badge">Pure Gold</div>
         </div>
         <div class="product-body">
           <h3 class="product-name" id="prod-name-ghee">Premium Village Cow Ghee</h3>
           <p class="product-desc" id="prod-desc-ghee">Slow-cooked pure cow ghee made from cultured butter cream. Granular texture, signature traditional aroma, and deep golden color.</p>
           <div class="product-footer">
-            <div class="price" id="prod-price-ghee">1,200 ৳ <span id="prod-unit-ghee">/ Kg</span></div>
-            <button class="add-btn" id="btn-select-ghee" onclick="selectProduct('Premium Village Cow Ghee')">Select</button>
+            <div class="price-wrap">
+              <div class="price" id="prod-price-ghee">1,200 ৳</div>
+              <div class="price-unit" id="prod-unit-ghee">/ Kg</div>
+            </div>
+            <button class="add-btn" id="btn-select-ghee" onclick="selectProduct('Premium Village Cow Ghee')">
+              Order Now
+            </button>
           </div>
         </div>
       </article>
@@ -187,32 +228,49 @@
 
   <!-- ── HOW IT WORKS ── -->
   <section class="process" id="process">
-    <span class="section-label" id="lbl-ops-driven">Operations Driven</span>
-    <h2 id="process-heading">How Fresh Milk Reaches You</h2>
-    <p class="process-sub" id="process-subtitle">A daily logistically optimized flow built around freshness and temperature control.</p>
-    
+    <div class="process-bg-pattern"></div>
+    <div class="section-header reveal-fade" style="color: inherit;">
+      <span class="section-label" id="lbl-ops-driven" style="color: var(--gold);">Operations Driven</span>
+      <h2 id="process-heading" style="color: #fff;">How Fresh Milk Reaches You</h2>
+      <p class="process-sub" id="process-subtitle">A daily logistically optimized flow built around freshness and temperature control.</p>
+    </div>
     <div class="process-steps" id="process-timeline">
-      
-      <div class="step reveal-up" id="step-order">
-        <div class="step-icon">📱<span class="step-num">1</span></div>
+
+      <div class="step reveal-up" id="step-order" style="--step-delay: 0s">
+        <div class="step-connector"></div>
+        <div class="step-icon-wrap">
+          <div class="step-icon">📱</div>
+          <div class="step-num">1</div>
+        </div>
         <h3 id="step-title-1">Place Order Before 8 PM</h3>
         <p id="step-desc-1">Order today. We lock the collection volumes for tomorrow morning's dispatch.</p>
       </div>
 
-      <div class="step reveal-up" id="step-collect">
-        <div class="step-icon">👨‍🌾<span class="step-num">2</span></div>
+      <div class="step reveal-up" id="step-collect" style="--step-delay: 0.15s">
+        <div class="step-connector"></div>
+        <div class="step-icon-wrap">
+          <div class="step-icon">👨‍🌾</div>
+          <div class="step-num">2</div>
+        </div>
         <h3 id="step-title-2">Morning Collection</h3>
         <p id="step-desc-2">Milk is collected early in the morning from verified farmer families at local centers.</p>
       </div>
 
-      <div class="step reveal-up" id="step-chill">
-        <div class="step-icon">❄️<span class="step-num">3</span></div>
+      <div class="step reveal-up" id="step-chill" style="--step-delay: 0.3s">
+        <div class="step-connector"></div>
+        <div class="step-icon-wrap">
+          <div class="step-icon">❄️</div>
+          <div class="step-num">3</div>
+        </div>
         <h3 id="step-title-3">250 KM Transport</h3>
         <p id="step-desc-3">Milk is instantly chilled to 4°C and transported in refrigerated containers over 250 kilometers.</p>
       </div>
 
-      <div class="step reveal-up" id="step-deliver">
-        <div class="step-icon">🚚<span class="step-num">4</span></div>
+      <div class="step reveal-up" id="step-deliver" style="--step-delay: 0.45s">
+        <div class="step-icon-wrap">
+          <div class="step-icon">🚚</div>
+          <div class="step-num">4</div>
+        </div>
         <h3 id="step-title-4">Next Morning Delivery</h3>
         <p id="step-desc-4">Arrives in the city fresh and cold, delivered to your doorstep within 24 hours of milking.</p>
       </div>
@@ -222,15 +280,19 @@
 
   <!-- ── TESTIMONIALS ── -->
   <section class="testimonials" id="testimonials">
-    <div class="section-header">
+    <div class="section-header reveal-fade">
       <span class="section-label" id="lbl-cust-reviews">Customer Reviews</span>
       <h2 id="reviews-heading">What Milk Lovers Say</h2>
     </div>
     <div class="testimonials-grid" id="reviews-list">
-      
-      <div class="testimonial reveal-up" id="review-1">
-        <span class="quote-mark">“</span>
-        <div class="stars">★★★★★</div>
+
+      <div class="testimonial reveal-up" id="review-1" style="--t-delay: 0s">
+        <div class="testimonial-top">
+          <div class="stars">★★★★★</div>
+          <span class="quote-svg">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M10 8C7 8 5 10 5 13c0 3 2 5 5 5v6l5-6c0-3-2-10-5-10zM22 8c-3 0-5 2-5 5 0 3 2 5 5 5v6l5-6c0-3-2-10-5-10z" fill="currentColor" opacity="0.15"/></svg>
+          </span>
+        </div>
         <p id="rev-text-1">I was skeptical about delivery from 250 KM away, but the milk arrived ice-cold and has a beautiful cream layer after boiling. Reminds me of my village home.</p>
         <div class="reviewer">
           <div class="reviewer-avatar">🥛</div>
@@ -241,9 +303,13 @@
         </div>
       </div>
 
-      <div class="testimonial reveal-up" id="review-2">
-        <span class="quote-mark">“</span>
-        <div class="stars">★★★★★</div>
+      <div class="testimonial reveal-up" id="review-2" style="--t-delay: 0.12s">
+        <div class="testimonial-top">
+          <div class="stars">★★★★★</div>
+          <span class="quote-svg">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M10 8C7 8 5 10 5 13c0 3 2 5 5 5v6l5-6c0-3-2-10-5-10zM22 8c-3 0-5 2-5 5 0 3 2 5 5 5v6l5-6c0-3-2-10-5-10z" fill="currentColor" opacity="0.15"/></svg>
+          </span>
+        </div>
         <p id="rev-text-2">We order the Full Cream Milk daily. The ghee made from this milk is incredible! My kids love the natural sweetness. Highly recommend the subscription.</p>
         <div class="reviewer">
           <div class="reviewer-avatar">✨</div>
@@ -254,9 +320,13 @@
         </div>
       </div>
 
-      <div class="testimonial reveal-up" id="review-3">
-        <span class="quote-mark">“</span>
-        <div class="stars">★★★★★</div>
+      <div class="testimonial reveal-up" id="review-3" style="--t-delay: 0.24s">
+        <div class="testimonial-top">
+          <div class="stars">★★★★★</div>
+          <span class="quote-svg">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M10 8C7 8 5 10 5 13c0 3 2 5 5 5v6l5-6c0-3-2-10-5-10zM22 8c-3 0-5 2-5 5 0 3 2 5 5 5v6l5-6c0-3-2-10-5-10z" fill="currentColor" opacity="0.15"/></svg>
+          </span>
+        </div>
         <p id="rev-text-3">Traditional granular ghee is hard to find in Dhaka. DudhWala's cow ghee is aromatic, deep golden, and tastes authentic. Ordering was super simple.</p>
         <div class="reviewer">
           <div class="reviewer-avatar">🏺</div>
@@ -272,11 +342,14 @@
 
   <!-- ── ORDER ── -->
   <section class="order" id="order">
+    <div class="order-bg-decoration"></div>
     <div class="order-form reveal-left">
-      <h3 id="order-form-title">Place Your Order</h3>
+      <div class="order-form-header">
+        <h3 id="order-form-title">Place Your Order</h3>
+        <p class="order-form-sub">Fresh milk tomorrow morning. Order by 8 PM.</p>
+      </div>
       <form id="orderForm" onsubmit="handleOrderSubmit(event)">
-        
-        <!-- Customer Details -->
+
         <div class="form-group">
           <label for="customerName" id="lbl-cust-name">Full Name *</label>
           <input type="text" id="customerName" placeholder="Enter your full name" required>
@@ -323,7 +396,6 @@
           </div>
         </div>
 
-        <!-- Product Details -->
         <div class="form-row">
           <div class="form-group">
             <label for="orderProduct" id="lbl-order-product">Select Product *</label>
@@ -363,7 +435,6 @@
           </div>
         </div>
 
-        <!-- Payment Details -->
         <div class="form-group">
           <label for="paymentMethod" id="lbl-payment-method">Payment Method *</label>
           <select id="paymentMethod" onchange="togglePaymentInfo()" required>
@@ -373,13 +444,15 @@
           </select>
         </div>
 
-        <!-- Dynamic Mobile Banking Instructions -->
-        <div class="delivery-info" id="mobilePaymentInstructions" style="display: none; margin-bottom: 20px; border-left-color: var(--amber);">
+        <div class="payment-instruction-box" id="mobilePaymentInstructions" style="display: none;">
           <h4 id="paymentInstructionHeader">bKash Payment Method</h4>
           <p id="paymentInstructionText">Please send the money to <strong>01947-528890</strong> (Personal Account) via Send Money, and keep your Transaction ID ready. Our team will call you to confirm.</p>
         </div>
 
-        <button type="submit" class="submit-btn" id="btn-submit-order">Confirm Tomorrow's Delivery</button>
+        <button type="submit" class="submit-btn" id="btn-submit-order">
+          <span>Confirm Tomorrow's Delivery</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
       </form>
     </div>
 
@@ -389,28 +462,48 @@
       <p id="order-info-text">
         We operate a 24-hour delivery window. Any order received today before <strong>8:00 PM</strong> is collected from our farmers tomorrow morning, chilled, transported 250 KM, and delivered fresh to your door next morning.
       </p>
-      
-      <div class="delivery-info">
-        <h4 id="order-subinfo-title-1">📦 Real-time Status via WhatsApp</h4>
-        <p id="order-subinfo-text-1">After placing your order, you will receive an automatic WhatsApp notification confirming your delivery slot. You can message us anytime to adjust your subscription or delivery address.</p>
+
+      <div class="info-card">
+        <div class="info-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div>
+          <h4 id="order-subinfo-title-1">Real-time Status via WhatsApp</h4>
+          <p id="order-subinfo-text-1">After placing your order, you will receive an automatic WhatsApp notification confirming your delivery slot. You can message us anytime to adjust your subscription or delivery address.</p>
+        </div>
       </div>
 
-      <div class="delivery-info" style="margin-top: 24px; border-left-color: var(--gold);">
-        <h4 id="order-subinfo-title-2">🌿 Multiple Farmer Families</h4>
-        <p id="order-subinfo-text-2">Your purchase directly supports 15+ farmer families. We collect milk from verified local families who take excellent care of their pasture-fed cows. This ensures rich milk quality, every single day.</p>
+      <div class="info-card">
+        <div class="info-card-icon gold-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <h4 id="order-subinfo-title-2">Multiple Farmer Families</h4>
+          <p id="order-subinfo-text-2">Your purchase directly supports 15+ farmer families. We collect milk from verified local families who take excellent care of their pasture-fed cows. This ensures rich milk quality, every single day.</p>
+        </div>
+      </div>
+
+      <div class="order-guarantee">
+        <div class="guarantee-icon">✓</div>
+        <p>Not satisfied? We'll replace your order or issue a full refund, no questions asked.</p>
       </div>
     </div>
   </section>
 
   <!-- ── FOOTER ── -->
   <footer>
-    <div class="footer-grid">
+    <div class="footer-top">
       <div class="footer-brand">
-        <a href="#" class="nav-logo" id="footer-logo-link" style="display: flex; align-items: center; gap: 8px;">
-          <img src="logo.png" alt="DudhWala Logo" style="height: 38px; border-radius: 6px;">
+        <a href="#" class="nav-logo" id="footer-logo-link">
+          <img src="logo.png" alt="DudhWala Logo" class="nav-logo-img">
           Dudh<span>Wala</span>
         </a>
         <p id="footer-brand-text">Authentic, natural, farm-fresh milk sourced from local village farmers. Transported with love in our refrigerated cold chain.</p>
+        <div class="footer-social">
+          <a href="https://wa.me/8801998518914" class="social-btn" aria-label="WhatsApp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.993 2.002C6.478 2.002 2 6.479 2 11.994 2 13.8 2.49 15.494 3.338 16.953L2 22l5.229-1.303C8.656 21.526 10.28 22 11.993 22 17.507 22 22 17.521 22 12.006 22 6.479 17.507 2 11.993 2z"/></svg>
+          </a>
+        </div>
       </div>
       <div>
         <h5 id="footer-hdr-quicklinks">Quick Links</h5>

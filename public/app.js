@@ -828,35 +828,49 @@ function setupStatsCounter() {
 
 function animateStats() {
   const stats = [
-    { id: "stat-distance", targetVal: 250, suffix: "+ KM", suffixBn: "+ কিমি", labelEn: "Refrigerated Transport", labelBn: "কোল্ড-চেইন পরিবহন" },
-    { id: "stat-farmers", targetVal: 15, suffix: "+ Families", suffixBn: "+ পরিবার", labelEn: "Trusted Village Farmers", labelBn: "বিশ্বস্ত গ্রাম্য খামারি" },
-    { id: "stat-delivery", targetVal: 24, suffix: " Hrs", suffixBn: " ঘণ্টা", labelEn: "Freshness Window", labelBn: "সতেজতা উইন্ডো" }
+    { id: "stat-distance", targetVal: 250, unitEn: "KM",      unitBn: "কিমি",   labelEn: "Refrigerated Transport",  labelBn: "কোল্ড-চেইন পরিবহন" },
+    { id: "stat-farmers",  targetVal: 15,  unitEn: "Families", unitBn: "পরিবার", labelEn: "Trusted Village Farmers", labelBn: "বিশ্বস্ত গ্রাম্য খামারি" },
+    { id: "stat-delivery", targetVal: 24,  unitEn: "Hrs",      unitBn: "ঘণ্টা",  labelEn: "Freshness Window",        labelBn: "সতেজতা উইন্ডো" }
   ];
 
   stats.forEach(stat => {
     const el = document.getElementById(stat.id);
     if (!el) return;
 
-    let start = 0;
-    const duration = 1500; // 1.5 seconds
-    const stepTime = 30;
-    const steps = duration / stepTime;
-    const increment = stat.targetVal / steps;
+    const numEl   = el.querySelector(".stat-num");
+    const unitEl  = el.querySelector(".stat-unit");
+    const labelEl = el.querySelector(".stat-label");
 
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= stat.targetVal) {
-        start = stat.targetVal;
-        clearInterval(timer);
-      }
-      
-      const currentVal = Math.round(start);
+    // If the new HTML structure exists, animate just the number
+    if (numEl) {
+      let start = 0;
+      const duration = 1600;
+      const stepTime = 30;
+      const steps = duration / stepTime;
+      const increment = stat.targetVal / steps;
+
       const isBn = currentLang === "bn";
-      const displayNum = isBn ? translateNumber(currentVal) : currentVal;
-      const displaySuffix = isBn ? stat.suffixBn : stat.suffix;
-      const displayLabel = isBn ? stat.labelBn : stat.labelEn;
+      if (unitEl)  unitEl.textContent  = (stat.targetVal === 15 ? "+" : "") + (isBn ? stat.unitBn : stat.unitEn);
+      if (labelEl) labelEl.textContent = isBn ? stat.labelBn : stat.labelEn;
 
-      el.innerHTML = `<div class="stat-num">${displayNum}${displaySuffix}</div><div class="stat-label">${displayLabel}</div>`;
-    }, stepTime);
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= stat.targetVal) {
+          start = stat.targetVal;
+          clearInterval(timer);
+        }
+        const currentVal = Math.round(start);
+        const displayNum = isBn ? translateNumber(currentVal) : currentVal;
+        const prefix = (stat.id === "stat-distance" || stat.id === "stat-farmers") ? displayNum + "+" : displayNum;
+        numEl.textContent = prefix;
+      }, stepTime);
+    } else {
+      // Fallback for old HTML structure
+      const isBn = currentLang === "bn";
+      const displayNum = isBn ? translateNumber(stat.targetVal) : stat.targetVal;
+      const displayUnit = (stat.id !== "stat-delivery") ? "+" : "";
+      el.innerHTML = `<div class="stat-num">${displayNum}${displayUnit}</div><div class="stat-unit">${isBn ? stat.unitBn : stat.unitEn}</div><div class="stat-label">${isBn ? stat.labelBn : stat.labelEn}</div>`;
+    }
   });
 }
+
