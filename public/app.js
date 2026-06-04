@@ -1,12 +1,12 @@
 // Firebase configuration placeholders
 // Replace these values with your actual Firebase project settings
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE",
-  authDomain: "YOUR_PROJECT_ID_HERE.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID_HERE",
-  storageBucket: "YOUR_PROJECT_ID_HERE.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
-  appId: "YOUR_APP_ID_HERE"
+  apiKey: "AIzaSyAvvNhK4Kqy6J16ROHLJuszzvGtuLVxTbk",
+  authDomain: "fir-task-23a92.firebaseapp.com",
+  projectId: "fir-task-23a92",
+  storageBucket: "fir-task-23a92.firebasestorage.app",
+  messagingSenderId: "419478630401",
+  appId: "1:419478630401:web:4bf76c094377a4c1ae5000"
 };
 
 // Global State
