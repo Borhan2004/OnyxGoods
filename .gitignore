@@ -17,3 +17,7 @@ functions/service-account.json
 # OS Metadata
 .DS_Store
 Thumbs.db
+
+# Custom npm cache
+.npm-cache/
+**/.npm-cache/
