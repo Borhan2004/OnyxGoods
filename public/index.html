@@ -32,7 +32,7 @@
 
   <!-- ── HERO ── -->
   <header class="hero" id="home">
-    <div class="hero-left">
+    <div class="hero-left reveal-left">
       <div class="hero-badge" id="hero-badge-tag">100% Pure & Untouched</div>
       <h1 id="hero-heading">250 KM Fresh <em>Farm-to-Home</em> Milk Delivery</h1>
       <p class="hero-sub" id="hero-subtitle">
@@ -57,8 +57,17 @@
         </div>
       </div>
     </div>
-    <div class="hero-right" id="hero-visual">
-      <div class="hero-circle" id="hero-emoji-circle">🥛</div>
+    <div class="hero-right reveal-right" id="hero-visual">
+      <div class="hero-image-wrap">
+        <img src="images/hero_milk.png" alt="Fresh Farm Milk" class="hero-img">
+        <div class="hero-floating-card">
+          <span class="card-icon">🥛</span>
+          <div>
+            <h4 class="card-title">Pure Farm Milk</h4>
+            <p class="card-desc">Chilled to 4°C instantly</p>
+          </div>
+        </div>
+      </div>
       <div class="hero-decoration"></div>
       <div class="hero-decoration"></div>
       <div class="leaf">🌿</div>
@@ -95,13 +104,15 @@
 
   <!-- ── ABOUT (TRUST SECTION) ── -->
   <section class="about" id="about">
-    <div class="about-image-wrap">
-      <div class="about-img-box" id="about-emoji-box">🏡</div>
+    <div class="about-image-wrap reveal-left">
+      <div class="about-img-container">
+        <img src="images/about_farm.png" alt="Scenic Village Milk Farm" class="about-img">
+      </div>
       <div class="about-tag" id="about-badge-tag">
         <strong>100%</strong> Verified Village Sourced
       </div>
     </div>
-    <div class="about-details">
+    <div class="about-details reveal-right">
       <span class="section-label" id="lbl-why-us">Why Our Milk Is Different</span>
       <h2 id="about-heading">Naturally Rich, Safely <em>Chilled</em> & Untouched</h2>
       <p id="about-desc">
@@ -127,8 +138,10 @@
     <div class="products-grid" id="products-list">
       
       <!-- Product 1 -->
-      <article class="product-card" id="card-daily-milk">
-        <div class="product-img daily">🥛</div>
+      <article class="product-card reveal-scale" id="card-daily-milk">
+        <div class="product-img-wrap daily">
+          <img src="images/daily_milk.png" alt="Daily Raw Cow Milk" class="product-img-pic">
+        </div>
         <div class="product-body">
           <h3 class="product-name" id="prod-name-daily">Daily Raw Cow Milk</h3>
           <p class="product-desc" id="prod-desc-daily">Pure, raw, single-source cow milk chilled immediately. Rich in nutrients, ideal for families, boiling, and daily consumption.</p>
@@ -138,10 +151,12 @@
           </div>
         </div>
       </article>
-
+ 
       <!-- Product 2 -->
-      <article class="product-card" id="card-full-cream">
-        <div class="product-img full">🥛✨</div>
+      <article class="product-card reveal-scale" id="card-full-cream">
+        <div class="product-img-wrap full">
+          <img src="images/full_cream.png" alt="Full Cream Village Milk" class="product-img-pic">
+        </div>
         <div class="product-body">
           <h3 class="product-name" id="prod-name-full">Full Cream Village Milk</h3>
           <p class="product-desc" id="prod-desc-full">Rich in cream and natural fats, sourced from cows raised on green grass. Perfect for making traditional sweets, ghee, and curd.</p>
@@ -151,10 +166,12 @@
           </div>
         </div>
       </article>
-
+ 
       <!-- Product 3 -->
-      <article class="product-card" id="card-ghee">
-        <div class="product-img ghee">🏺</div>
+      <article class="product-card reveal-scale" id="card-ghee">
+        <div class="product-img-wrap ghee">
+          <img src="images/premium_ghee.png" alt="Premium Village Cow Ghee" class="product-img-pic">
+        </div>
         <div class="product-body">
           <h3 class="product-name" id="prod-name-ghee">Premium Village Cow Ghee</h3>
           <p class="product-desc" id="prod-desc-ghee">Slow-cooked pure cow ghee made from cultured butter cream. Granular texture, signature traditional aroma, and deep golden color.</p>
@@ -176,25 +193,25 @@
     
     <div class="process-steps" id="process-timeline">
       
-      <div class="step" id="step-order">
+      <div class="step reveal-up" id="step-order">
         <div class="step-icon">📱<span class="step-num">1</span></div>
         <h3 id="step-title-1">Place Order Before 8 PM</h3>
         <p id="step-desc-1">Order today. We lock the collection volumes for tomorrow morning's dispatch.</p>
       </div>
 
-      <div class="step" id="step-collect">
+      <div class="step reveal-up" id="step-collect">
         <div class="step-icon">👨‍🌾<span class="step-num">2</span></div>
         <h3 id="step-title-2">Morning Collection</h3>
         <p id="step-desc-2">Milk is collected early in the morning from verified farmer families at local centers.</p>
       </div>
 
-      <div class="step" id="step-chill">
+      <div class="step reveal-up" id="step-chill">
         <div class="step-icon">❄️<span class="step-num">3</span></div>
         <h3 id="step-title-3">250 KM Transport</h3>
         <p id="step-desc-3">Milk is instantly chilled to 4°C and transported in refrigerated containers over 250 kilometers.</p>
       </div>
 
-      <div class="step" id="step-deliver">
+      <div class="step reveal-up" id="step-deliver">
         <div class="step-icon">🚚<span class="step-num">4</span></div>
         <h3 id="step-title-4">Next Morning Delivery</h3>
         <p id="step-desc-4">Arrives in the city fresh and cold, delivered to your doorstep within 24 hours of milking.</p>
@@ -211,7 +228,7 @@
     </div>
     <div class="testimonials-grid" id="reviews-list">
       
-      <div class="testimonial" id="review-1">
+      <div class="testimonial reveal-up" id="review-1">
         <span class="quote-mark">“</span>
         <div class="stars">★★★★★</div>
         <p id="rev-text-1">I was skeptical about delivery from 250 KM away, but the milk arrived ice-cold and has a beautiful cream layer after boiling. Reminds me of my village home.</p>
@@ -224,7 +241,7 @@
         </div>
       </div>
 
-      <div class="testimonial" id="review-2">
+      <div class="testimonial reveal-up" id="review-2">
         <span class="quote-mark">“</span>
         <div class="stars">★★★★★</div>
         <p id="rev-text-2">We order the Full Cream Milk daily. The ghee made from this milk is incredible! My kids love the natural sweetness. Highly recommend the subscription.</p>
@@ -237,7 +254,7 @@
         </div>
       </div>
 
-      <div class="testimonial" id="review-3">
+      <div class="testimonial reveal-up" id="review-3">
         <span class="quote-mark">“</span>
         <div class="stars">★★★★★</div>
         <p id="rev-text-3">Traditional granular ghee is hard to find in Dhaka. DudhWala's cow ghee is aromatic, deep golden, and tastes authentic. Ordering was super simple.</p>
@@ -255,7 +272,7 @@
 
   <!-- ── ORDER ── -->
   <section class="order" id="order">
-    <div class="order-form">
+    <div class="order-form reveal-left">
       <h3 id="order-form-title">Place Your Order</h3>
       <form id="orderForm" onsubmit="handleOrderSubmit(event)">
         
@@ -366,7 +383,7 @@
       </form>
     </div>
 
-    <div class="order-info">
+    <div class="order-info reveal-right">
       <span class="section-label" id="lbl-freshness-guaranteed">Freshness Guaranteed</span>
       <h2 id="order-info-heading">Tomorrow Morning Delivery</h2>
       <p id="order-info-text">

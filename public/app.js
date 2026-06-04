@@ -425,6 +425,8 @@ window.addEventListener("DOMContentLoaded", () => {
   setLanguage(currentLang);
   setupDateInput();
   setupNavbarScroll();
+  setupScrollReveal();
+  setupStatsCounter();
 });
 
 // Setup date input defaults
@@ -774,4 +776,87 @@ function showToast(message, isError = false) {
       toast.style.display = "none";
     }, 3500);
   }
+}
+
+// Scroll Reveal Animation with Intersection Observer
+function setupScrollReveal() {
+  const observerOptions = {
+    root: null,
+    rootMargin: "0px -10% -10% 0px", // triggers slightly before elements are fully in view
+    threshold: 0.1
+  };
+
+  const revealCallback = (entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("reveal-active");
+        observer.unobserve(entry.target); // Animate once
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(revealCallback, observerOptions);
+  
+  // Select all revealable elements
+  const revealElements = document.querySelectorAll(
+    ".reveal-fade, .reveal-up, .reveal-left, .reveal-right, .reveal-scale"
+  );
+  
+  revealElements.forEach(el => observer.observe(el));
+}
+
+// Stats Counter Animation
+function setupStatsCounter() {
+  const statsSection = document.querySelector(".hero-stats");
+  if (!statsSection) return;
+
+  const observerOptions = {
+    threshold: 0.3
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateStats();
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  observer.observe(statsSection);
+}
+
+function animateStats() {
+  const stats = [
+    { id: "stat-distance", targetVal: 250, suffix: "+ KM", suffixBn: "+ কিমি", labelEn: "Refrigerated Transport", labelBn: "কোল্ড-চেইন পরিবহন" },
+    { id: "stat-farmers", targetVal: 15, suffix: "+ Families", suffixBn: "+ পরিবার", labelEn: "Trusted Village Farmers", labelBn: "বিশ্বস্ত গ্রাম্য খামারি" },
+    { id: "stat-delivery", targetVal: 24, suffix: " Hrs", suffixBn: " ঘণ্টা", labelEn: "Freshness Window", labelBn: "সতেজতা উইন্ডো" }
+  ];
+
+  stats.forEach(stat => {
+    const el = document.getElementById(stat.id);
+    if (!el) return;
+
+    let start = 0;
+    const duration = 1500; // 1.5 seconds
+    const stepTime = 30;
+    const steps = duration / stepTime;
+    const increment = stat.targetVal / steps;
+
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= stat.targetVal) {
+        start = stat.targetVal;
+        clearInterval(timer);
+      }
+      
+      const currentVal = Math.round(start);
+      const isBn = currentLang === "bn";
+      const displayNum = isBn ? translateNumber(currentVal) : currentVal;
+      const displaySuffix = isBn ? stat.suffixBn : stat.suffix;
+      const displayLabel = isBn ? stat.labelBn : stat.labelEn;
+
+      el.innerHTML = `<div class="stat-num">${displayNum}${displaySuffix}</div><div class="stat-label">${displayLabel}</div>`;
+    }, stepTime);
+  });
 }
