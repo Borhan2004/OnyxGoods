@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper: Checks if the request is from an authenticated user
+    function isAdmin() {
+      return request.auth != null;
+    }
+
+    // Orders: public can create, only admin can read, write, delete
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read, write: if isAdmin();
+    }
+
+    // Customers: public can create (during checkout), only admin can read, write
+    match /customers/{customerId} {
+      allow create: if true;
+      allow read, write: if isAdmin();
+    }
+
+    // Subscriptions: public can create, only admin can read, write
+    match /subscriptions/{subscriptionId} {
+      allow create: if true;
+      allow read, write: if isAdmin();
+    }
+
+    // Farmers: public can read, only admin can write
+    match /farmers/{farmerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Delivery Zones: public can read, only admin can write
+    match /delivery_zones/{zoneId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

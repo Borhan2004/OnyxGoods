@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>KhamarGhor | Admin Dashboard</title>
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-body">
+
+  <!-- ── AUTHENTICATION GATE (LOGIN SCREEN) ── -->
+  <div id="authOverlay" class="auth-overlay">
+    <div class="auth-card">
+      <h3>Admin Sign In</h3>
+      <p id="authSubtitle">Enter your credentials to access the KhamarGhor delivery management portal.</p>
+      
+      <form id="loginForm" onsubmit="handleAdminLogin(event)">
+        <div class="form-group">
+          <label for="adminEmail">Email Address</label>
+          <input type="email" id="adminEmail" placeholder="admin@khamarghor.com" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" placeholder="••••••••" required>
+        </div>
+        
+        <button type="submit" class="submit-btn" id="btn-login-submit" style="margin-top: 10px;">Sign In to Dashboard</button>
+      </form>
+      
+      <div class="delivery-info" style="margin-top: 24px; border-left-color: var(--amber); padding: 16px;">
+        <h4 style="font-size: 0.95rem; margin-bottom: 6px;">💡 Testing / Local Demo</h4>
+        <p style="font-size: 0.82rem; line-height: 1.5; color: var(--muted); margin: 0;">
+          If Firebase configuration isn't customized yet, use these mock credentials:<br>
+          <strong>Email:</strong> admin@khamarghor.com<br>
+          <strong>Password:</strong> password123
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MAIN DASHBOARD INTERFACE ── -->
+  <div id="dashboardWrapper" style="display: none;">
+    
+    <!-- Top Navigation Bar -->
+    <header class="admin-header">
+      <div class="admin-logo">Khamar<span>Ghor Portal</span></div>
+      <div class="admin-user">
+        <span id="adminUserEmail" style="font-weight: 500; font-size: 0.9rem;">admin@khamarghor.com</span>
+        <button onclick="handleAdminLogout()" class="admin-logout" id="btn-logout">Sign Out</button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="admin-container">
+      
+      <!-- Metrics Row -->
+      <section class="stats-grid">
+        
+        <div class="stat-card orders" id="card-stats-today">
+          <div class="stat-info">
+            <h4>Today's Orders</h4>
+            <div class="stat-val" id="val-today-orders">0</div>
+          </div>
+          <div class="stat-icon">📦</div>
+        </div>
+
+        <div class="stat-card" id="card-stats-tomorrow" style="border-left-color: var(--amber);">
+          <div class="stat-info">
+            <h4>Tomorrow's Deliveries</h4>
+            <div class="stat-val" id="val-tomorrow-deliveries">0</div>
+          </div>
+          <div class="stat-icon">🚚</div>
+        </div>
+
+        <div class="stat-card subs" id="card-stats-subs">
+          <div class="stat-info">
+            <h4>Active Subscriptions</h4>
+            <div class="stat-val" id="val-active-subs">0</div>
+          </div>
+          <div class="stat-icon">📅</div>
+        </div>
+
+        <div class="stat-card revenue" id="card-stats-revenue">
+          <div class="stat-info">
+            <h4>Today's Revenue</h4>
+            <div class="stat-val" id="val-today-revenue">0 ৳</div>
+          </div>
+          <div class="stat-icon">💰</div>
+        </div>
+
+      </section>
+
+      <!-- Operations Panel Header -->
+      <section class="admin-actions">
+        <div class="admin-filters">
+          <button class="filter-btn active" id="btn-filter-today" onclick="setFilter('today')">Today's Orders</button>
+          <button class="filter-btn" id="btn-filter-tomorrow" onclick="setFilter('tomorrow')">Tomorrow's Deliveries</button>
+          <button class="filter-btn" id="btn-filter-all" onclick="setFilter('all')">All Orders</button>
+          <button class="filter-btn" id="btn-filter-subs" onclick="setFilter('subscriptions')">Subscriptions</button>
+          <button class="filter-btn" id="btn-filter-customers" onclick="setFilter('customers')">Customers List</button>
+        </div>
+        
+        <div>
+          <button onclick="exportToCSV()" class="btn-export" id="btn-csv-export">
+            <span>📥</span> Export to Google Sheets (CSV)
+          </button>
+        </div>
+      </section>
+
+      <!-- Data Table Panel -->
+      <section class="table-container">
+        <table class="admin-table" id="dataTable">
+          <thead id="tableHead">
+            <!-- Headers are rendered dynamically by admin.js -->
+          </thead>
+          <tbody id="tableBody">
+            <!-- Rows are rendered dynamically by admin.js -->
+            <tr>
+              <td colspan="10" style="text-align: center; color: var(--muted); padding: 40px;">Loading portal records...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ── TOAST NOTIFICATION ── -->
+  <div id="toastMessage" class="toast-msg">
+    <span id="toastIcon">✅</span>
+    <span id="toastText">Action completed successfully</span>
+  </div>
+
+  <!-- Firebase Compat JS SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+  <!-- Admin Dashboard Controller -->
+  <script src="admin.js"></script>
+</body>
+</html>

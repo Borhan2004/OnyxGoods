@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules/
+functions/node_modules/
+
+# Firebase Cache & Logs
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Private keys / credentials
+service-account.json
+functions/service-account.json
+.env
+.env.local
+
+# OS Metadata
+.DS_Store
+Thumbs.db
