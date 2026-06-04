@@ -1,6 +1,6 @@
-# KhamarGhor Milk Delivery Platform
+# DudhWala Milk Delivery Platform
 
-KhamarGhor is an operations-driven, farm-fresh milk delivery web application. Sourced direct from rural farmer families, the system is designed to handle ordering logistics, cold chain operations, and order dispatching.
+DudhWala is an operations-driven, farm-fresh milk delivery web application. Sourced direct from rural farmer families, the system is designed to handle ordering logistics, cold chain operations, and order dispatching.
 
 This project is built as a lightweight, performant Firebase application.
 
@@ -52,7 +52,7 @@ To move from Mock Mode to a production database:
 ### 1. Configure Firebase Console
 1. Go to [Firebase Console](https://console.firebase.google.com/) and click **Add Project**.
 2. Go to **Authentication** -> **Sign-in method** and enable **Email/Password**.
-3. Create an admin user under the **Users** tab (e.g. `your-admin@khamarghor.com` and a secure password).
+3. Create an admin user under the **Users** tab (e.g. `your-admin@dudhwala.com` and a secure password).
 4. Go to **Firestore Database** and click **Create Database** (Select Start in test mode, since rules will be overwritten from code).
 
 ### 2. Add Project Keys to Code

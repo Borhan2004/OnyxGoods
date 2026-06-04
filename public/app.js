@@ -17,8 +17,8 @@ let currentLang = localStorage.getItem("lang") || "en";
 // Translation Dictionaries
 const translations = {
   en: {
-    "page-title": "KhamarGhor | 250 KM Fresh Farm-to-Home Milk Delivery",
-    "nav-logo-link": 'Khamar<span>Ghor</span>',
+    "page-title": "DudhWala | 250 KM Fresh Farm-to-Home Milk Delivery",
+    "nav-logo-link": 'Dudh<span>Wala</span>',
     "link-home": "Home",
     "link-about": "Why Us",
     "link-products": "Products",
@@ -87,7 +87,7 @@ const translations = {
     "rev-text-2": "We order the Full Cream Milk daily. The ghee made from this milk is incredible! My kids love the natural sweetness. Highly recommend the subscription.",
     "rev-name-2": "Nusrat Jahan",
     "rev-loc-2": "Gulshan, Dhaka",
-    "rev-text-3": "Traditional granular ghee is hard to find in Dhaka. KhamarGhor's cow ghee is aromatic, deep golden, and tastes authentic. Ordering was super simple.",
+    "rev-text-3": "Traditional granular ghee is hard to find in Dhaka. DudhWala's cow ghee is aromatic, deep golden, and tastes authentic. Ordering was super simple.",
     "rev-name-3": "Farhan Ahmed",
     "rev-loc-3": "Dhanmondi, Dhaka",
     
@@ -123,13 +123,15 @@ const translations = {
     "order-subinfo-title-2": "🌿 Multiple Farmer Families",
     "order-subinfo-text-2": "Your purchase directly supports 15+ farmer families. We collect milk from verified local families who take excellent care of their pasture-fed cows. This ensures rich milk quality, every single day.",
     
-    "footer-logo-link": 'Khamar<span>Ghor</span>',
+    "footer-logo-link": 'Dudh<span>Wala</span>',
     "footer-brand-text": "Authentic, natural, farm-fresh milk sourced from local village farmers. Transported with love in our refrigerated cold chain.",
     "footer-hdr-quicklinks": "Quick Links",
     "footer-hdr-contact": "Contact Us",
     "footer-hdr-portal": "System Portal",
-    "footer-copyright": "&copy; 2026 KhamarGhor Milk Delivery. All rights reserved.",
+    "footer-copyright": "&copy; 2026 DudhWala Milk Delivery. All rights reserved.",
     "footer-subtitle": "Collected Today, Delivered Chilled Tomorrow.",
+    "footer-wa": "💬 WhatsApp: +880 1998-518914",
+    "footer-email": "📧 borhankustia@gmail.com",
     
     // Quick Links text links
     "fl-home": "Home",
@@ -146,8 +148,8 @@ const translations = {
     "toast-placing": "Placing Order..."
   },
   bn: {
-    "page-title": "খামারঘর | ২৫০ কিমি দূর থেকে খামার-তাজা গরুর দুধ ডেলিভারি",
-    "nav-logo-link": 'Khamar<span>Ghor</span>',
+    "page-title": "দুধওয়ালা | ২৫০ কিমি দূর থেকে খামার-তাজা গরুর দুধ ডেলিভারি",
+    "nav-logo-link": 'Dudh<span>Wala</span>',
     "link-home": "হোম",
     "link-about": "আমাদের বৈশিষ্ট্য",
     "link-products": "পণ্যসমূহ",
@@ -215,8 +217,8 @@ const translations = {
     "rev-loc-1": "মিরপুর, ঢাকা",
     "rev-text-2": "আমরা প্রতিদিন ফুল ক্রিম দুধের অর্ডার করি। এই দুধ দিয়ে বানানো ঘি সত্যিই অসাধারণ! আমার সন্তানরা এর প্রাকৃতিক মিষ্টি স্বাদ পছন্দ করে। সাবস্ক্রিপশন নেওয়ার জোরালো সুপারিশ করছি।",
     "rev-name-2": "নুসরাত জাহান",
-    "rev-loc-2": "গুলশান, ঢাকা",
-    "rev-text-3": "ঢাকায় খাঁটি দানাদার ঘি পাওয়া খুব কঠিন। খামারঘরের গরুর ঘি সুগন্ধি, গাঢ় সোনালী এবং স্বাদে অতুলনীয়। অর্ডার করা খুবই সহজ ছিল।",
+    "rev-loc-2": "গুলshan, ঢাকা",
+    "rev-text-3": "ঢাকায় খাঁটি দানাদার ঘি পাওয়া খুব কঠিন। দুধওয়ালার গরুর ঘি সুগন্ধি, গাঢ় সোনালী এবং স্বাদে অতুলনীয়। অর্ডার করা খুবই সহজ ছিল।",
     "rev-name-3": "ফরহান আহমেদ",
     "rev-loc-3": "ধানমন্ডি, ঢাকা",
     
@@ -252,13 +254,15 @@ const translations = {
     "order-subinfo-title-2": "🌿 বহু খামারি পরিবার",
     "order-subinfo-text-2": "আপনার প্রতিটি কেনাকাটা সরাসরি ১৫টিরও বেশি খামারি পরিবারকে সহায়তা করে। আমরা যাচাইকৃত স্থানীয় পরিবারগুলোর থেকে দুধ সংগ্রহ করি যারা তাদের চারণভূমিতে পালিত গরুর চমৎকার যত্ন নেয়। এটি প্রতিদিন পুষ্টিগুণ সমৃদ্ধ দুধ নিশ্চিত করে।",
     
-    "footer-logo-link": 'Khamar<span>Ghor</span>',
+    "footer-logo-link": 'Dudh<span>Wala</span>',
     "footer-brand-text": "স্থানীয় গ্রাম্য খামারিদের থেকে সংগৃহীত খাঁটি, প্রাকৃতিক ও খামার-তাজা গরুর দুধ। ভালোবাসার সাথে আমাদের রেফ্রিজারেটেড কোল্ড চেইনে পরিবাহিত।",
     "footer-hdr-quicklinks": "সহজ লিঙ্ক",
     "footer-hdr-contact": "যোগাযোগ করুন",
     "footer-hdr-portal": "অ্যাডমিন পোর্টাল",
-    "footer-copyright": "&copy; ২০২৬ খামারঘর মিল্ক ডেলিভারি। সর্বস্বত্ব সংরক্ষিত।",
+    "footer-copyright": "&copy; ২০২৬ দুধওয়ালা মিল্ক ডেলিভারি। সর্বস্বত্ব সংরক্ষিত।",
     "footer-subtitle": "আজ সংগৃহীত, আগামীকাল ঠান্ডা ও সতেজ ডেলিভারি।",
+    "footer-wa": "💬 হোয়াটসঅ্যাপ: ০১৯৯৮৫১৮৯১৪",
+    "footer-email": "📧 borhankustia@gmail.com",
     
     "fl-home": "হোম",
     "fl-about": "আমাদের বৈশিষ্ট্য",
@@ -656,7 +660,7 @@ async function saveFirestoreData(order) {
 
 // Redirect client to WhatsApp with pre-filled message
 function sendWhatsAppNotification(order) {
-  const businessNumber = "8801700000000"; // Replace with your actual company WhatsApp number
+  const businessNumber = "8801998518914"; // Replace with your actual company WhatsApp number
   const productPrice = getPrice(order.product);
   const totalPrice = productPrice * order.quantity;
   
@@ -670,7 +674,7 @@ function sendWhatsAppNotification(order) {
   
   let textMsg = "";
   if (currentLang === "en") {
-    textMsg = `Hello KhamarGhor! 🥛
+    textMsg = `Hello DudhWala! 🥛
 
 I just placed an order. Here are my details:
 ━━━━━━━━━━━━━━━━━━━━
@@ -711,7 +715,7 @@ Please confirm my delivery slots. Thank you!`;
       return pay;
     };
 
-    textMsg = `হ্যালো খামারঘর! 🥛
+    textMsg = `হ্যালো দুধওয়ালা! 🥛
 
 আমি একটি নতুন অর্ডার করেছি। আমার বিবরণ নিচে দেওয়া হলো:
 ━━━━━━━━━━━━━━━━━━━━
