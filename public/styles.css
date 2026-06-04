@@ -941,6 +941,8 @@ footer ul a:hover {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--cream);
+  display: flex;
+  align-items: center;
 }
 .admin-logo span {
   color: var(--gold);

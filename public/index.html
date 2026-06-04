@@ -12,7 +12,10 @@
 
   <!-- ── NAV ── -->
   <nav id="navbar">
-    <a href="#" class="nav-logo" id="nav-logo-link">Dudh<span>Wala</span></a>
+    <a href="#" class="nav-logo" id="nav-logo-link" style="display: flex; align-items: center; gap: 8px;">
+      <img src="logo.png" alt="DudhWala Logo" style="height: 38px; border-radius: 6px;">
+      Dudh<span>Wala</span>
+    </a>
     <ul class="nav-links" id="nav-menu">
       <li><a href="#" id="link-home">Home</a></li>
       <li><a href="#about" id="link-about">Why Us</a></li>
@@ -264,11 +267,11 @@
         <div class="form-row">
           <div class="form-group">
             <label for="customerPhone" id="lbl-cust-phone">Phone Number *</label>
-            <input type="tel" id="customerPhone" placeholder="e.g. 01712345678" pattern="[0-9]{11}" title="Please enter a valid 11-digit phone number" required>
+            <input type="tel" id="customerPhone" placeholder="e.g. 01947528890" pattern="[0-9]{11}" title="Please enter a valid 11-digit phone number" required>
           </div>
           <div class="form-group">
             <label for="customerWhatsapp" id="lbl-cust-whatsapp">WhatsApp Number *</label>
-            <input type="tel" id="customerWhatsapp" placeholder="e.g. 01712345678" pattern="[0-9]{11}" title="Please enter a valid 11-digit WhatsApp number" required>
+            <input type="tel" id="customerWhatsapp" placeholder="e.g. 01947528890" pattern="[0-9]{11}" title="Please enter a valid 11-digit WhatsApp number" required>
           </div>
         </div>
 
@@ -355,7 +358,7 @@
         <!-- Dynamic Mobile Banking Instructions -->
         <div class="delivery-info" id="mobilePaymentInstructions" style="display: none; margin-bottom: 20px; border-left-color: var(--amber);">
           <h4 id="paymentInstructionHeader">bKash Payment Method</h4>
-          <p id="paymentInstructionText">Please send the money to <strong>01712-345678</strong> (Personal Account) via Send Money, and keep your Transaction ID ready. Our team will call you to confirm.</p>
+          <p id="paymentInstructionText">Please send the money to <strong>01947-528890</strong> (Personal Account) via Send Money, and keep your Transaction ID ready. Our team will call you to confirm.</p>
         </div>
 
         <button type="submit" class="submit-btn" id="btn-submit-order">Confirm Tomorrow's Delivery</button>
@@ -385,7 +388,10 @@
   <footer>
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="#" class="nav-logo" id="footer-logo-link">Dudh<span>Wala</span></a>
+        <a href="#" class="nav-logo" id="footer-logo-link" style="display: flex; align-items: center; gap: 8px;">
+          <img src="logo.png" alt="DudhWala Logo" style="height: 38px; border-radius: 6px;">
+          Dudh<span>Wala</span>
+        </a>
         <p id="footer-brand-text">Authentic, natural, farm-fresh milk sourced from local village farmers. Transported with love in our refrigerated cold chain.</p>
       </div>
       <div>

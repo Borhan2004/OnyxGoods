@@ -18,7 +18,7 @@ let currentLang = localStorage.getItem("lang") || "en";
 const translations = {
   en: {
     "page-title": "DudhWala | 250 KM Fresh Farm-to-Home Milk Delivery",
-    "nav-logo-link": 'Dudh<span>Wala</span>',
+    "nav-logo-link": '<img src="logo.png" alt="DudhWala Logo" style="height: 38px; border-radius: 6px;">Dudh<span>Wala</span>',
     "link-home": "Home",
     "link-about": "Why Us",
     "link-products": "Products",
@@ -123,7 +123,7 @@ const translations = {
     "order-subinfo-title-2": "🌿 Multiple Farmer Families",
     "order-subinfo-text-2": "Your purchase directly supports 15+ farmer families. We collect milk from verified local families who take excellent care of their pasture-fed cows. This ensures rich milk quality, every single day.",
     
-    "footer-logo-link": 'Dudh<span>Wala</span>',
+    "footer-logo-link": '<img src="logo.png" alt="DudhWala Logo" style="height: 38px; border-radius: 6px;">Dudh<span>Wala</span>',
     "footer-brand-text": "Authentic, natural, farm-fresh milk sourced from local village farmers. Transported with love in our refrigerated cold chain.",
     "footer-hdr-quicklinks": "Quick Links",
     "footer-hdr-contact": "Contact Us",
@@ -149,7 +149,7 @@ const translations = {
   },
   bn: {
     "page-title": "দুধওয়ালা | ২৫০ কিমি দূর থেকে খামার-তাজা গরুর দুধ ডেলিভারি",
-    "nav-logo-link": 'Dudh<span>Wala</span>',
+    "nav-logo-link": '<img src="logo.png" alt="DudhWala Logo" style="height: 38px; border-radius: 6px;">Dudh<span>Wala</span>',
     "link-home": "হোম",
     "link-about": "আমাদের বৈশিষ্ট্য",
     "link-products": "পণ্যসমূহ",
@@ -254,7 +254,7 @@ const translations = {
     "order-subinfo-title-2": "🌿 বহু খামারি পরিবার",
     "order-subinfo-text-2": "আপনার প্রতিটি কেনাকাটা সরাসরি ১৫টিরও বেশি খামারি পরিবারকে সহায়তা করে। আমরা যাচাইকৃত স্থানীয় পরিবারগুলোর থেকে দুধ সংগ্রহ করি যারা তাদের চারণভূমিতে পালিত গরুর চমৎকার যত্ন নেয়। এটি প্রতিদিন পুষ্টিগুণ সমৃদ্ধ দুধ নিশ্চিত করে।",
     
-    "footer-logo-link": 'Dudh<span>Wala</span>',
+    "footer-logo-link": '<img src="logo.png" alt="DudhWala Logo" style="height: 38px; border-radius: 6px;">Dudh<span>Wala</span>',
     "footer-brand-text": "স্থানীয় গ্রাম্য খামারিদের থেকে সংগৃহীত খাঁটি, প্রাকৃতিক ও খামার-তাজা গরুর দুধ। ভালোবাসার সাথে আমাদের রেফ্রিজারেটেড কোল্ড চেইনে পরিবাহিত।",
     "footer-hdr-quicklinks": "সহজ লিঙ্ক",
     "footer-hdr-contact": "যোগাযোগ করুন",
@@ -347,10 +347,10 @@ function setLanguage(lang) {
   if (nameInput) nameInput.placeholder = lang === "en" ? "Enter your full name" : "আপনার পূর্ণ নাম লিখুন";
   
   const phoneInput = document.getElementById("customerPhone");
-  if (phoneInput) phoneInput.placeholder = lang === "en" ? "e.g. 01712345678" : "যেমন: ০১৭১২৩৪৫৬৭৮";
+  if (phoneInput) phoneInput.placeholder = lang === "en" ? "e.g. 01947528890" : "যেমন: ০১৯৪৭৫২৮৮৯০";
   
   const waInput = document.getElementById("customerWhatsapp");
-  if (waInput) waInput.placeholder = lang === "en" ? "e.g. 01712345678" : "যেমন: ০১৭১২৩৪৫৬৭৮";
+  if (waInput) waInput.placeholder = lang === "en" ? "e.g. 01947528890" : "যেমন: ০১৯৪৭৫২৮৮৯০";
   
   const addrInput = document.getElementById("customerAddress");
   if (addrInput) addrInput.placeholder = lang === "en" ? "Apartment, House, Road, Block details" : "বাসা, ফ্ল্যাট, রোড, ব্লক ও এলাকা বিস্তারিত";
@@ -506,14 +506,14 @@ function togglePaymentInfo() {
     instructionBox.style.display = "block";
     header.innerText = currentLang === "en" ? "bKash Payment Instructions" : "বিকাশ পেমেন্ট নির্দেশনাবলী";
     text.innerHTML = currentLang === "en" 
-      ? "Please send the total order amount to <strong>01712-345678</strong> (Personal bKash) via <strong>Send Money</strong>. Paste your Transaction ID in the Landmark field or share it over WhatsApp."
-      : "অনুগ্রহ করে অর্ডারের মোট টাকা <strong>01712-345678</strong> (পার্সোনাল বিকাশ) নম্বরে <strong>সেন্ড মানি</strong> করুন। আপনার ট্রানজেকশন আইডি-টি ল্যান্ডমার্ক ফিল্ডে লিখুন অথবা হোয়াটসঅ্যাপে আমাদের সাথে শেয়ার করুন।";
+      ? "Please send the total order amount to <strong>01947-528890</strong> (Personal bKash) via <strong>Send Money</strong>. Paste your Transaction ID in the Landmark field or share it over WhatsApp."
+      : "অনুগ্রহ করে অর্ডারের মোট টাকা <strong>০১৯৪৭-৫২৮৮৯০</strong> (পার্সোনাল বিকাশ) নম্বরে <strong>সেন্ড মানি</strong> করুন। আপনার ট্রানজেকশন আইডি-টি ল্যান্ডমার্ক ফিল্ডে লিখুন অথবা হোয়াটসঅ্যাপে আমাদের সাথে শেয়ার করুন।";
   } else if (method === "Nagad") {
     instructionBox.style.display = "block";
     header.innerText = currentLang === "en" ? "Nagad Payment Instructions" : "নগদ পেমেন্ট নির্দেশনাবলী";
     text.innerHTML = currentLang === "en" 
-      ? "Please send the total order amount to <strong>01712-345678</strong> (Personal Nagad) via <strong>Send Money</strong>. Paste your Transaction ID in the Landmark field or share it over WhatsApp."
-      : "অনুগ্রহ করে অর্ডারের মোট টাকা <strong>01712-345678</strong> (পার্সোনাল নগদ) নম্বরে <strong>সেন্ড মানি</strong> করুন। আপনার ট্রানজেকশন আইডি-টি ল্যান্ডমার্ক ফিল্ডে লিখুন অথবা হোয়াটসঅ্যাপে আমাদের সাথে শেয়ার করুন।";
+      ? "Please send the total order amount to <strong>01947-528890</strong> (Personal Nagad) via <strong>Send Money</strong>. Paste your Transaction ID in the Landmark field or share it over WhatsApp."
+      : "অনুগ্রহ করে অর্ডারের মোট টাকা <strong>০১৯৪৭-৫২৮৮৯০</strong> (পার্সোনাল নগদ) নম্বরে <strong>সেন্ড মানি</strong> করুন। আপনার ট্রানজেকশন আইডি-টি ল্যান্ডমার্ক ফিল্ডে লিখুন অথবা হোয়াটসঅ্যাপে আমাদের সাথে শেয়ার করুন।";
   } else {
     instructionBox.style.display = "none";
   }
