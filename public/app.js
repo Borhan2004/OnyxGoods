@@ -425,6 +425,8 @@ window.addEventListener("DOMContentLoaded", () => {
   setLanguage(currentLang);
   setupDateInput();
   setupNavbarScroll();
+  setupScrollReveal();
+  setupStatsCounter();
 });
 
 // Setup date input defaults
@@ -775,3 +777,100 @@ function showToast(message, isError = false) {
     }, 3500);
   }
 }
+
+// Scroll Reveal Animation with Intersection Observer
+function setupScrollReveal() {
+  const observerOptions = {
+    root: null,
+    rootMargin: "0px -10% -10% 0px", // triggers slightly before elements are fully in view
+    threshold: 0.1
+  };
+
+  const revealCallback = (entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("reveal-active");
+        observer.unobserve(entry.target); // Animate once
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(revealCallback, observerOptions);
+  
+  // Select all revealable elements
+  const revealElements = document.querySelectorAll(
+    ".reveal-fade, .reveal-up, .reveal-left, .reveal-right, .reveal-scale"
+  );
+  
+  revealElements.forEach(el => observer.observe(el));
+}
+
+// Stats Counter Animation
+function setupStatsCounter() {
+  const statsSection = document.querySelector(".hero-stats");
+  if (!statsSection) return;
+
+  const observerOptions = {
+    threshold: 0.3
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateStats();
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  observer.observe(statsSection);
+}
+
+function animateStats() {
+  const stats = [
+    { id: "stat-distance", targetVal: 250, unitEn: "KM",      unitBn: "কিমি",   labelEn: "Refrigerated Transport",  labelBn: "কোল্ড-চেইন পরিবহন" },
+    { id: "stat-farmers",  targetVal: 15,  unitEn: "Families", unitBn: "পরিবার", labelEn: "Trusted Village Farmers", labelBn: "বিশ্বস্ত গ্রাম্য খামারি" },
+    { id: "stat-delivery", targetVal: 24,  unitEn: "Hrs",      unitBn: "ঘণ্টা",  labelEn: "Freshness Window",        labelBn: "সতেজতা উইন্ডো" }
+  ];
+
+  stats.forEach(stat => {
+    const el = document.getElementById(stat.id);
+    if (!el) return;
+
+    const numEl   = el.querySelector(".stat-num");
+    const unitEl  = el.querySelector(".stat-unit");
+    const labelEl = el.querySelector(".stat-label");
+
+    // If the new HTML structure exists, animate just the number
+    if (numEl) {
+      let start = 0;
+      const duration = 1600;
+      const stepTime = 30;
+      const steps = duration / stepTime;
+      const increment = stat.targetVal / steps;
+
+      const isBn = currentLang === "bn";
+      if (unitEl)  unitEl.textContent  = (stat.targetVal === 15 ? "+" : "") + (isBn ? stat.unitBn : stat.unitEn);
+      if (labelEl) labelEl.textContent = isBn ? stat.labelBn : stat.labelEn;
+
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= stat.targetVal) {
+          start = stat.targetVal;
+          clearInterval(timer);
+        }
+        const currentVal = Math.round(start);
+        const displayNum = isBn ? translateNumber(currentVal) : currentVal;
+        const prefix = (stat.id === "stat-distance" || stat.id === "stat-farmers") ? displayNum + "+" : displayNum;
+        numEl.textContent = prefix;
+      }, stepTime);
+    } else {
+      // Fallback for old HTML structure
+      const isBn = currentLang === "bn";
+      const displayNum = isBn ? translateNumber(stat.targetVal) : stat.targetVal;
+      const displayUnit = (stat.id !== "stat-delivery") ? "+" : "";
+      el.innerHTML = `<div class="stat-num">${displayNum}${displayUnit}</div><div class="stat-unit">${isBn ? stat.unitBn : stat.unitEn}</div><div class="stat-label">${isBn ? stat.labelBn : stat.labelEn}</div>`;
+    }
+  });
+}
+
