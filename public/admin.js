@@ -51,7 +51,7 @@ function initializeAdminPortal() {
 function setupMockSession() {
   const isLogged = sessionStorage.getItem("gram_dudh_admin_logged") === "true";
   if (isLogged) {
-    showDashboard("admin@khamarghor.com");
+    showDashboard("borhankustia@gmail.com");
   } else {
     showLoginScreen();
   }
@@ -84,12 +84,12 @@ async function handleAdminLogin(event) {
   try {
     if (isMockMode) {
       // Hardcoded mock credentials
-      if (email === "admin@khamarghor.com" && password === "password123") {
+      if (email === "borhankustia@gmail.com" && password === "Eusuf#") {
         sessionStorage.setItem("gram_dudh_admin_logged", "true");
         showDashboard(email);
         showToast("Logged in successfully (Mock Mode)");
       } else {
-        throw new Error("Invalid mock credentials. Use email: admin@khamarghor.com, password: password123");
+        throw new Error("Invalid mock credentials. Use email: borhankustia@gmail.com, password: Eusuf#");
       }
     } else {
       await firebase.auth().signInWithEmailAndPassword(email, password);
