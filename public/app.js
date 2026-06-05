@@ -221,20 +221,97 @@ async function loadCatalogData() {
   try {
     if (isMockMode) {
       categories = JSON.parse(localStorage.getItem("shikor_categories") || "[]");
-      products = JSON.parse(localStorage.getItem("shikor_products") || "[]");
-      coupons = JSON.parse(localStorage.getItem("shikor_coupons") || "[]");
+      products   = JSON.parse(localStorage.getItem("shikor_products")   || "[]");
+      coupons    = JSON.parse(localStorage.getItem("shikor_coupons")    || "[]");
     } else {
-      const catSnap = await db.collection("categories").get();
+      // Load from Firestore
+      const [catSnap, prodSnap, coupSnap] = await Promise.all([
+        db.collection("categories").get(),
+        db.collection("products").get(),
+        db.collection("coupons").get()
+      ]);
+
       categories = catSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      products   = prodSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      coupons    = coupSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-      const prodSnap = await db.collection("products").get();
-      products = prodSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      // If Firestore has NO products yet (fresh database), seed defaults
+      if (products.length === 0) {
+        console.log("No products in Firestore — seeding default catalog...");
+        await seedDefaultCatalogToFirestore();
+      }
 
-      const coupSnap = await db.collection("coupons").get();
-      coupons = coupSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      // If Firestore has NO coupons yet, seed defaults
+      if (coupons.length === 0) {
+        await seedDefaultCouponsToFirestore();
+      }
     }
   } catch (error) {
     console.error("Error loading database catalog:", error);
+    // Graceful fallback — use localStorage data so shop isn't completely broken
+    isMockMode = true;
+    categories = JSON.parse(localStorage.getItem("shikor_categories") || "[]");
+    products   = JSON.parse(localStorage.getItem("shikor_products")   || "[]");
+    coupons    = JSON.parse(localStorage.getItem("shikor_coupons")    || "[]");
+    if (categories.length === 0) setupMockDatabase();
+  }
+}
+
+// Seed default categories + products to Firestore (called once on fresh DB)
+async function seedDefaultCatalogToFirestore() {
+  const defaultCategories = [
+    { id: "cat_dairy",       nameEn: "Fresh Dairy",           nameBn: "তাজা দুগ্ধজাত পণ্য",       descriptionEn: "100% pure milk, fresh ghee, and authentic dairy products.",              descriptionBn: "১০০% খাঁটি দুধ, তাজা ঘি এবং আসল দুগ্ধজাত খাবার।",            imagePath: "images/daily_milk.png",    status: "Active" },
+    { id: "cat_honey",       nameEn: "Honey & Natural",       nameBn: "মধু ও প্রাকৃতিক পণ্য",      descriptionEn: "Raw Sundarbans honey, pure mustard oil, and forest goods.",              descriptionBn: "সুন্দরবনের খাঁটি মধু, কাঠের ঘানি ভাঙা সরিষার তেল।",           imagePath: "images/premium_ghee.png",  status: "Active" },
+    { id: "cat_traditional", nameEn: "Traditional Foods",     nameBn: "ঐতিহ্যবাহী খাবার",          descriptionEn: "Crispy Kushtia sesame brittle, traditional date jaggery, and snacks.", descriptionBn: "কুষ্টিয়ার মচমচে তিলের খাজা, ঐতিহ্যবাহী খেজুর গুড়।",         imagePath: "images/tiler_khaja.png",   status: "Active" },
+    { id: "cat_handmade",    nameEn: "Handmade Products",     nameBn: "হস্তশিল্প",                  descriptionEn: "Hand-stitched Nakshikantha quilts and home decor.",                   descriptionBn: "হাতে সেলাই করা চমৎকার নকশিকাঁথা এবং মৃৎশিল্প।",              imagePath: "images/nakshikantha.png",  status: "Active" },
+    { id: "cat_grains",      nameEn: "Rice & Grains",         nameBn: "চাল ও শস্যদানা",             descriptionEn: "Traditional aromatic rice and nutrient-rich grains.",                  descriptionBn: "ঐতিহ্যবাহী সুগন্ধি চাল এবং পুষ্টিসমৃদ্ধ শস্যদানা।",          imagePath: "images/tiler_khaja.png",   status: "Active" },
+    { id: "cat_organic",     nameEn: "Organic Products",      nameBn: "অর্গানিক পণ্য",              descriptionEn: "Strictly chemical-free, verified health foods.",                        descriptionBn: "সম্পূর্ণ রাসায়নিক ও প্রিজারভেটিভ মুক্ত অর্গানিক খাবার।",      imagePath: "images/premium_ghee.png",  status: "Active" }
+  ];
+
+  const defaultProducts = [
+    { id: "prod_raw_milk",     categoryId: "cat_dairy",       nameEn: "Daily Raw Cow Milk",            nameBn: "দৈনিক কাঁচা গরুর দুধ",            descEn: "Pure, raw cow milk chilled immediately. Rich in nutrients.",             descBn: "শতভাগ খাঁটি ও কাঁচা গরুর দুধ। পুষ্টিগুণে ভরপুর।",                  benefitsEn: ["Chilled at source","No preservatives","Rich nutrients"],           benefitsBn: ["সংগ্রহের পর দ্রুত শীতলীকৃত","কোনো প্রিজারভেটিভ নেই","প্রাকৃতিক পুষ্টি"],  price: 80,   discountPrice: 75,   stock: 45, unitEn: "liter",  unitBn: "লিটার",  imagePath: "images/daily_milk.png",   inStock: true, isFeatured: true, badgeEn: "Best Seller", badgeBn: "সেরা বিক্রীত",    createdAt: new Date().toISOString() },
+    { id: "prod_ghee",         categoryId: "cat_dairy",       nameEn: "Premium Village Cow Ghee",      nameBn: "প্রিমিয়াম গ্রাম্য গরুর ঘি",       descEn: "Slow-cooked pure cow ghee with signature aroma.",                       descBn: "ধিমে আঁচে জ্বাল দেওয়া খাঁটি গরুর ঘি। দানাদার গঠন ও সুবাস।",        benefitsEn: ["Traditionally slow cooked","Granular texture","Pure butter"],      benefitsBn: ["ঐতিহ্যবাহী উপায়ে তৈরি","দানাদার ও খাঁটি সুবাস","প্রাকৃতিক মাখন"],        price: 1200, discountPrice: 1150, stock: 15, unitEn: "kg",     unitBn: "কেজি",   imagePath: "images/premium_ghee.png", inStock: true, isFeatured: true, badgeEn: "Pure Gold",   badgeBn: "খাঁটি সোনালী",    createdAt: new Date().toISOString() },
+    { id: "prod_mustard_oil",  categoryId: "cat_honey",       nameEn: "Authentic Mustard Oil",         nameBn: "খাঁটি সরিষার তেল",                descEn: "100% pure cold-pressed mustard oil from high-quality seeds.",           descBn: "কাঠের ঘানিতে ভাঙানো শতভাগ খাঁটি সরিষার তেল।",                       benefitsEn: ["Cold-pressed extraction","High pungency","No chemicals"],          benefitsBn: ["কাঠের ঘানিতে কোল্ড-প্রেসড","খাঁটি ঝাজালো স্বাদ","কোনো কেমিকেল নেই"],    price: 280,  discountPrice: 0,    stock: 40, unitEn: "liter",  unitBn: "লিটার",  imagePath: "images/mustard_oil.png",  inStock: true, isFeatured: true, badgeEn: "Cold Pressed",badgeBn: "ঘানি ভাঙা",       createdAt: new Date().toISOString() },
+    { id: "prod_nakshikantha", categoryId: "cat_handmade",    nameEn: "Nakshikantha Quilt",            nameBn: "নকশিকাঁথা",                       descEn: "Beautiful hand-stitched traditional Bengali quilt by village artisans.", descBn: "গ্রামের কারিগরদের হাতে তৈরি চমৎকার ঐতিহ্যবাহী নকশিকাঁথা।",        benefitsEn: ["100% hand-stitched","Traditional designs","Quality cotton"],       benefitsBn: ["হাতের নিখুঁত সেলাই","ঐতিহ্যবাহী নকশা","উন্নত সুতি কাপড়"],              price: 2500, discountPrice: 2200, stock: 5,  unitEn: "piece",  unitBn: "পিস",    imagePath: "images/nakshikantha.png", inStock: true, isFeatured: true, badgeEn: "Artisan",     badgeBn: "হস্তশিল্প",       createdAt: new Date().toISOString() },
+    { id: "prod_tiler_khaja",  categoryId: "cat_traditional", nameEn: "Kushtia Tiler Khaja",           nameBn: "কুষ্টিয়ার তিলের খাজা",           descEn: "Famous traditional sesame brittle from Kushtia, crispy and sweet.",     descBn: "কুষ্টিয়ার বিখ্যাত মচমচে তিলের খাজা।",                              benefitsEn: ["Traditional recipe","No artificial sweeteners","Pure sesame"],     benefitsBn: ["ঐতিহ্যবাহী রেসিপি","কৃত্রিম মিষ্টি নেই","খাঁটি তিল"],                  price: 160,  discountPrice: 150,  stock: 60, unitEn: "pack",   unitBn: "প্যাকেট", imagePath: "images/tiler_khaja.png",  inStock: true, isFeatured: true, badgeEn: "Special",     badgeBn: "কুষ্টিয়ার ঐতিহ্য", createdAt: new Date().toISOString() }
+  ];
+
+  try {
+    const batch = db.batch();
+    defaultCategories.forEach(cat => {
+      batch.set(db.collection("categories").doc(cat.id), cat);
+    });
+    defaultProducts.forEach(prod => {
+      batch.set(db.collection("products").doc(prod.id), prod);
+    });
+    await batch.commit();
+
+    // Reload after seeding
+    const [catSnap, prodSnap] = await Promise.all([
+      db.collection("categories").get(),
+      db.collection("products").get()
+    ]);
+    categories = catSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    products   = prodSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    console.log("Default catalog seeded to Firestore successfully.");
+  } catch (e) {
+    console.error("Failed to seed catalog to Firestore:", e);
+  }
+}
+
+async function seedDefaultCouponsToFirestore() {
+  const defaultCoupons = [
+    { code: "SHIKOR10",   type: "percentage", value: 10,  expiryDate: "2027-12-31", status: "Active" },
+    { code: "WELCOME100", type: "fixed",       value: 100, expiryDate: "2027-12-31", status: "Active" },
+    { code: "EID2026",    type: "percentage", value: 20,  expiryDate: "2026-09-30", status: "Active" }
+  ];
+  try {
+    const batch = db.batch();
+    defaultCoupons.forEach(c => batch.set(db.collection("coupons").doc(c.code), c));
+    await batch.commit();
+    coupons = defaultCoupons;
+  } catch (e) {
+    console.error("Failed to seed coupons:", e);
   }
 }
 
