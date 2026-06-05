@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Secure e-commerce checkout on OnyxGoods. Enter delivery details and select payment method.">
+  <title id="page-title">Secure Checkout | OnyxGoods</title>
+  <link rel="icon" type="image/png" href="logo.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="logo.jpg" class="nav-logo-img" alt="Logo" style="height: 38px; width: 38px; vertical-align: middle; margin-right: 8px; border-radius: 50%; object-fit: cover;">
+      OnyxGoods<span>.</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" id="nav-home">Home</a></li>
+      <li><a href="shop.html" id="nav-shop">Shop</a></li>
+      <li><a href="index.html#story" id="nav-story">Our Story</a></li>
+      <li><a href="index.html#reviews" id="nav-reviews">Reviews</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="mobile-menu-btn" class="mobile-menu-btn" style="display:none; background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--dark-brown);">☰</button>
+      <button id="lang-switch" class="lang-btn">বাংলা</button>
+      <a href="account.html" class="profile-btn" title="My Account" id="nav-account-btn">👤</a>
+      <a href="cart.html" class="cart-badge-container" id="nav-cart-btn">
+        🛒 <span class="cart-badge" id="cart-count-badge">০</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── CHECKOUT CONTENT ── -->
+  <main class="checkout-container">
+    
+    <!-- Billing details form (Left) -->
+    <div class="checkout-card">
+      <h3 style="font-family:'Playfair Display',serif; color:var(--dark-brown); font-size:1.6rem; margin-bottom:20px;">Billing & Shipping Details</h3>
+      <form id="checkout-billing-form">
+        
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="checkout-name" style="font-size:0.85rem; font-weight:700;">Full Name *</label>
+          <input type="text" id="checkout-name" placeholder="Enter your full name" required style="width: 100%; padding: 10px 14px; border: 1px solid #E8D9C8; border-radius: 8px; outline: none; margin-top:4px;">
+        </div>
+
+        <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:14px;">
+          <div class="form-group">
+            <label for="checkout-phone" style="font-size:0.85rem; font-weight:700;">Mobile Number *</label>
+            <input type="tel" id="checkout-phone" placeholder="e.g. 01711223344" pattern="[0-9]{11}" title="Please enter a valid 11-digit phone number" required style="width: 100%; padding: 10px 14px; border: 1px solid #E8D9C8; border-radius: 8px; outline: none; margin-top:4px;">
+          </div>
+          <div class="form-group">
+            <label for="checkout-whatsapp" style="font-size:0.85rem; font-weight:700;">WhatsApp Number *</label>
+            <input type="tel" id="checkout-whatsapp" placeholder="e.g. 01711223344" pattern="[0-9]{11}" title="Please enter a valid 11-digit WhatsApp number" required style="width: 100%; padding: 10px 14px; border: 1px solid #E8D9C8; border-radius: 8px; outline: none; margin-top:4px;">
+          </div>
+        </div>
+
+        <div class="form-row" style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:16px; margin-bottom:14px;">
+          <div class="form-group">
+            <label for="checkout-email" style="font-size:0.85rem; font-weight:700;">Email Address *</label>
+            <input type="email" id="checkout-email" placeholder="e.g. name@domain.com" required style="width: 100%; padding: 10px 14px; border: 1px solid #E8D9C8; border-radius: 8px; outline: none; margin-top:4px;">
+          </div>
+          <div class="form-group">
+            <label for="checkout-district" style="font-size:0.85rem; font-weight:700;">District *</label>
+            <select id="checkout-district" required style="width: 100%; padding: 10px 14px; border: 1px solid #E8D9C8; border-radius: 8px; outline: none; margin-top:4px; height:auto; background:#fff;">
+              <option value="Dhaka">Dhaka</option>
+              <option value="Chittagong">Chittagong</option>
+              <option value="Sylhet">Sylhet</option>
+              <option value="Kushtia">Kushtia</option>
+              <option value="Jessore">Jessore</option>
+              <option value="Rajshahi">Rajshahi</option>
+              <option value="Khulna">Khulna</option>
+              <option value="Barisal">Barisal</option>
+              <option value="Rangpur">Rangpur</option>
+              <option value="Mymensingh">Mymensingh</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:20px;">
+          <label for="checkout-address" style="font-size:0.85rem; font-weight:700;">Delivery Address *</label>
+          <textarea id="checkout-address" placeholder="Apartment, Road, Block, Area details" required style="width: 100%; padding: 10px 14px; border: 1px solid #E8D9C8; border-radius: 8px; outline: none; margin-top:4px; height:80px; resize:vertical; font-family:inherit;"></textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom:20px;">
+          <label for="checkout-notes" style="font-size:0.85rem; font-weight:700;">Order Notes (Optional)</label>
+          <textarea id="checkout-notes" placeholder="Special delivery notes or payment trans reference details" style="width: 100%; padding: 10px 14px; border: 1px solid #E8D9C8; border-radius: 8px; outline: none; margin-top:4px; height:60px; resize:vertical; font-family:inherit;"></textarea>
+        </div>
+
+        <h4 class="checkout-section-title">Select Payment Method</h4>
+        <div class="payment-methods-grid">
+          <div class="payment-card active" data-method="Cash">
+            <span class="payment-card-logo">💵</span>
+            <span class="payment-card-name">Cash on Delivery</span>
+          </div>
+          <div class="payment-card" data-method="Bkash">
+            <span class="payment-card-logo">📱</span>
+            <span class="payment-card-name">bKash Payment</span>
+          </div>
+          <div class="payment-card" data-method="Nagad">
+            <span class="payment-card-logo">📞</span>
+            <span class="payment-card-name">Nagad Payment</span>
+          </div>
+        </div>
+
+        <!-- Hidden dynamic payment instruction boxes -->
+        <div class="payment-instructions-checkout" id="checkout-payment-instructions"></div>
+        
+      </form>
+    </div>
+
+    <!-- Order Summary Card (Right) -->
+    <div class="cart-summary-wrapper">
+      <div class="cart-summary-card">
+        <h4 class="summary-title" style="margin-bottom:16px;">Order Summary</h4>
+        
+        <!-- Items breakdown log list -->
+        <div class="checkout-summary-list" id="checkout-items-list">
+          <!-- Filled dynamically -->
+        </div>
+
+        <div class="summary-line" style="border-top:1.5px solid var(--cream-mid); padding-top:14px;">
+          <span id="lbl-subtotal">Subtotal</span>
+          <span id="checkout-subtotal">০ ৳</span>
+        </div>
+
+        <div class="summary-line" style="color: #c0392b;">
+          <span id="lbl-discount">Discount</span>
+          <span id="checkout-discount">০ ৳</span>
+        </div>
+
+        <div class="summary-line">
+          <span id="lbl-shipping">Shipping</span>
+          <span id="checkout-shipping">০ ৳</span>
+        </div>
+
+        <div class="summary-line total">
+          <span id="lbl-total">Total</span>
+          <span id="checkout-total" style="font-size:1.4rem;">০ ৳</span>
+        </div>
+
+        <button type="submit" form="checkout-billing-form" class="btn-primary btn-checkout" id="btn-submit-order-checkout">
+          Place Order
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="logo.jpg" class="nav-logo-img" alt="Logo" style="height: 38px; width: 38px; vertical-align: middle; margin-right: 8px; border-radius: 50%; object-fit: cover;">
+          OnyxGoods<span>.</span>
+        </a>
+        <p id="footer-about-text">OnyxGoods connects authentic village products directly with urban consumers, empowering rural Bangladeshi families and artisans.</p>
+      </div>
+      <div>
+        <h5 id="footer-links-title">Quick Links</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop Marketplace</a></li>
+          <li><a href="index.html#story">Our Story</a></li>
+          <li><a href="index.html#reviews">Reviews</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 id="footer-contact-title">Contact Us</h5>
+        <ul>
+          <li><a href="https://wa.me/8801302101024" id="footer-whatsapp">💬 WhatsApp: +8801302101024</a></li>
+          <li><a href="mailto:onyxsupport36@gmail.com" id="footer-email">📧 onyxsupport36@gmail.com</a></li>
+          <li><a href="#" id="footer-loc">📍 Dhaka Office: Mirpur-10</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 id="footer-admin-title">System Portal</h5>
+        <ul>
+          <li><a href="admin.html" id="footer-admin-link">🔑 Admin Dashboard</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p id="footer-copyright">&copy; 2026 OnyxGoods Marketplace. All rights reserved.</p>
+      <p id="footer-subtitle">Village Roots, Urban Trust.</p>
+    </div>
+  </footer>
+
+  <!-- ── TOAST NOTIFICATION ── -->
+  <div id="toastMessage" class="toast-msg">
+    <span id="toastIcon">✅</span>
+    <span id="toastText">Action completed successfully!</span>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+
+  <!-- ── FLOATING WHATSAPP ── -->
+  <a href="https://wa.me/8801302101024?text=Hello+OnyxGoods!" class="floating-whatsapp" target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.822.736 5.469 2.025 7.773L0 32l8.468-2.004A15.927 15.927 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm8.121 22.121c-.336.947-1.945 1.808-2.706 1.921-.693.104-1.567.147-2.528-.159-.582-.189-1.33-.44-2.283-.862-4.016-1.742-6.636-5.822-6.836-6.093-.196-.27-1.6-2.129-1.6-4.063 0-1.934 1.013-2.887 1.373-3.279.359-.392.782-.49 1.043-.49.261 0 .521.003.749.013.24.011.562-.091.88.672.336.799 1.143 2.775 1.242 2.978.1.203.163.44.033.712-.13.27-.196.44-.392.675-.196.236-.412.528-.588.708-.196.2-.4.415-.173.815.228.4.012 2.436 2.073 3.329 1.432.624 2.574.815 3.008.908.434.094 1.013-.106 1.383-.514.37-.408.947-1.111 1.205-1.518.26-.407.52-.34.879-.204.359.136 2.277 1.073 2.667 1.268.39.196.651.293.748.457.097.163.097.946-.24 1.893z"/></svg>
+  </a>
+
+  <!-- ── MOBILE BOTTOM NAV ── -->
+  <nav class="mobile-bottom-nav">
+    <ul>
+      <li><a href="index.html"><span class="mnav-icon">🏠</span>Home</a></li>
+      <li><a href="shop.html"><span class="mnav-icon">🛒</span>Shop</a></li>
+      <li><a href="cart.html" style="position:relative;"><span class="mnav-icon">🛍️</span>Cart<span class="mnav-badge" id="mnav-cart-count">0</span></a></li>
+      <li><a href="account.html"><span class="mnav-icon">👤</span>Account</a></li>
+    </ul>
+  </nav>
+  <!-- Application JS -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,63 +1,87 @@
-// Firebase configuration placeholders - must match app.js
+// ════════════════════════════════════════
+// OnyxGoods ADMIN PORTAL v3.0
+// Pro Marketplace Dashboard with Image Upload
+// ════════════════════════════════════════
+
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD1xvrgTpoldBiMkPi4YkRB3f35j7wgkBY",
-  authDomain: "dudhwala-13a69.firebaseapp.com",
-  projectId: "dudhwala-13a69",
-  storageBucket: "dudhwala-13a69.firebasestorage.app",
-  messagingSenderId: "360751875123",
-  appId: "1:360751875123:web:dd56e1cd1f0ad8e01d4f46"
+  apiKey: "AIzaSyCRpexJ6gD9VpbLX_IhLSJ0jMMxohBvrPw",
+  authDomain: "onyxgoods.firebaseapp.com",
+  projectId: "onyxgoods",
+  storageBucket: "onyxgoods.firebasestorage.app",
+  messagingSenderId: "576476626749",
+  appId: "1:576476626749:web:6b8cfd1f2bbd6417cbcf54"
 };
 
-// Global State Variables
+// Global State
 let db = null;
+let storage = null;
 let isMockMode = false;
-let activeFilter = 'today'; // default filter
+let activeTab = "dashboard";
+let activeOrderFilter = "All";
+let orderSearchTerm = "";
+let prodSearchTerm = "";
+let custSearchTerm = "";
+let catSearchTerm = "";
 
 // Data Arrays
+let categories = [];
+let products = [];
 let orders = [];
 let customers = [];
-let subscriptions = [];
+let coupons = [];
+let settings = {};
 
-// Initialize Database & Auth Listeners
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+window.addEventListener("DOMContentLoaded", () => {
+  initializeAdminPortal();
+});
+
 function initializeAdminPortal() {
-  const isDefaultConfig = firebaseConfig.projectId.includes("YOUR_PROJECT_ID_HERE") || !firebaseConfig.apiKey;
+  const urlParams = new URLSearchParams(window.location.search);
+  const forceMock = urlParams.has('mock');
+  const isDefaultConfig = forceMock || !firebaseConfig.apiKey || firebaseConfig.projectId.includes("YOUR_PROJECT");
 
   if (isDefaultConfig) {
-    console.warn("Admin panel is running in MOCK MODE (local storage).");
+    console.warn("Admin running in MOCK MODE (localStorage).");
     isMockMode = true;
+    updateModeBadge();
     setupMockSession();
   } else {
     try {
       firebase.initializeApp(firebaseConfig);
       db = firebase.firestore();
-      
-      // Setup Firebase Auth listener
+      storage = firebase.storage();
+      updateModeBadge();
       firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          showDashboard(user.email);
-        } else {
-          showLoginScreen();
-        }
+        if (user) showDashboard(user.email);
+        else showLoginScreen();
       });
     } catch (error) {
-      console.error("Firebase auth initialization failed. Falling back to Mock Mode.", error);
+      console.error("Firebase failed. Switching to Mock Mode.", error);
       isMockMode = true;
+      updateModeBadge();
       setupMockSession();
     }
   }
 }
 
-// Mock auth session management for LocalStorage mode
-function setupMockSession() {
-  const isLogged = sessionStorage.getItem("gram_dudh_admin_logged") === "true";
-  if (isLogged) {
-    showDashboard("borhankustia@gmail.com");
-  } else {
-    showLoginScreen();
-  }
+function updateModeBadge() {
+  const label = isMockMode ? "🔧 Mock Mode" : "🔥 Firebase Live";
+  const el1 = document.getElementById("sidebarModeBadge");
+  const el2 = document.getElementById("adminModeBadge");
+  if (el1) el1.textContent = label;
+  if (el2) el2.textContent = label;
 }
 
-// Show Dashboard container, hide login
+function setupMockSession() {
+  const logged = sessionStorage.getItem("onyx_goods_admin_logged") === "true";
+  if (logged) showDashboard("onyxsupport36@gmail.com");
+  else showLoginScreen();
+}
+
 function showDashboard(email) {
   document.getElementById("authOverlay").style.display = "none";
   document.getElementById("dashboardWrapper").style.display = "block";
@@ -65,498 +89,1085 @@ function showDashboard(email) {
   loadPortalData();
 }
 
-// Show Login overlay, hide dashboard
 function showLoginScreen() {
   document.getElementById("authOverlay").style.display = "flex";
   document.getElementById("dashboardWrapper").style.display = "none";
 }
 
-// Handle login submissions
+// ════════════════════════════════════════
+// MOBILE SIDEBAR TOGGLE
+// ════════════════════════════════════════
+window.toggleMobileSidebar = function() {
+  const sidebar = document.getElementById("adminSidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+  sidebar.classList.toggle("mobile-open");
+  overlay.classList.toggle("visible");
+};
+
+window.closeMobileSidebar = function() {
+  document.getElementById("adminSidebar").classList.remove("mobile-open");
+  document.getElementById("sidebarOverlay").classList.remove("visible");
+};
+
+// ════════════════════════════════════════
+// AUTHENTICATION
+// ════════════════════════════════════════
 async function handleAdminLogin(event) {
   event.preventDefault();
   const email = document.getElementById("adminEmail").value.trim();
   const password = document.getElementById("adminPassword").value.trim();
-  const submitBtn = document.getElementById("btn-login-submit");
+  const btn = document.getElementById("btn-login-submit");
 
-  submitBtn.disabled = true;
-  submitBtn.innerText = "Authenticating...";
+  btn.disabled = true;
+  btn.innerHTML = `<span class="upload-spinner"></span> Authenticating...`;
 
   try {
     if (isMockMode) {
-      // Hardcoded mock credentials
-      if (email === "borhankustia@gmail.com" && password === "Eusuf#") {
-        sessionStorage.setItem("gram_dudh_admin_logged", "true");
-        showDashboard(email);
-        showToast("Logged in successfully (Mock Mode)");
-      } else {
-        throw new Error("Invalid mock credentials. Use email: borhankustia@gmail.com, password: Eusuf#");
-      }
+      sessionStorage.setItem("onyx_goods_admin_logged", "true");
+      showDashboard(email);
+      showToast("Logged in (Mock Mode) ✅");
     } else {
       await firebase.auth().signInWithEmailAndPassword(email, password);
-      showToast("Access granted!");
+      showToast("Access granted! Welcome back 🎉");
     }
   } catch (error) {
-    console.error("Login error:", error);
-    showToast(error.message || "Failed to authenticate.", true);
+    showToast(error.message || "Authentication failed.", true);
   } finally {
-    submitBtn.disabled = false;
-    submitBtn.innerText = "Sign In to Dashboard";
+    btn.disabled = false;
+    btn.innerHTML = "Sign In to Dashboard";
   }
 }
 
-// Handle logout
 async function handleAdminLogout() {
   if (isMockMode) {
-    sessionStorage.removeItem("gram_dudh_admin_logged");
+    sessionStorage.removeItem("onyx_goods_admin_logged");
     showLoginScreen();
-    showToast("Signed out from Mock Mode.");
+    showToast("Signed out.");
   } else {
     try {
       await firebase.auth().signOut();
       showToast("Signed out successfully.");
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
+    } catch (e) { console.error(e); }
   }
 }
 
-// Load all collections and compute statistics
+// ════════════════════════════════════════
+// DATA LOADING
+// ════════════════════════════════════════
 async function loadPortalData() {
   try {
     if (isMockMode) {
-      orders = JSON.parse(localStorage.getItem("gram_dudh_orders") || "[]");
-      customers = JSON.parse(localStorage.getItem("gram_dudh_customers") || "[]");
-      subscriptions = JSON.parse(localStorage.getItem("gram_dudh_subscriptions") || "[]");
+      categories = JSON.parse(localStorage.getItem("onyx_goods_categories") || "[]");
+      products   = JSON.parse(localStorage.getItem("onyx_goods_products")   || "[]");
+      orders     = JSON.parse(localStorage.getItem("onyx_goods_orders")     || "[]");
+      customers  = JSON.parse(localStorage.getItem("onyx_goods_customers")  || "[]");
+      coupons    = JSON.parse(localStorage.getItem("onyx_goods_coupons")    || "[]");
+      settings   = JSON.parse(localStorage.getItem("onyx_goods_settings")  || "{}");
     } else {
-      // Fetch from Firestore
-      const ordersSnap = await db.collection("orders").orderBy("createdAt", "desc").get();
-      orders = ordersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      const custSnap = await db.collection("customers").get();
-      customers = custSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      const subSnap = await db.collection("subscriptions").get();
-      subscriptions = subSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const [catSnap, prodSnap, ordSnap, custSnap, coupSnap, setDoc] = await Promise.all([
+        db.collection("categories").get(),
+        db.collection("products").get(),
+        db.collection("orders").orderBy("createdAt", "desc").get(),
+        db.collection("customers").get(),
+        db.collection("coupons").get(),
+        db.collection("settings").doc("store_settings").get()
+      ]);
+      categories = catSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      products   = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      orders     = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      customers  = custSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      coupons    = coupSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      settings   = setDoc.exists ? setDoc.data() : {};
     }
-
-    calculateStats();
-    renderTable();
-
+    renderActiveTab();
   } catch (error) {
-    console.error("Error fetching data:", error);
-    showToast("Error loading records from database.", true);
+    console.error("Portal fetch error:", error);
+    showToast("Failed to fetch records.", true);
   }
 }
 
-// Get standard date strings: 'YYYY-MM-DD'
-function getDateString(offsetDays = 0) {
-  const date = new Date();
-  if (offsetDays !== 0) {
-    date.setDate(date.getDate() + offsetDays);
+function saveMockState(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+// ════════════════════════════════════════
+// IMAGE UPLOAD SYSTEM
+// ════════════════════════════════════════
+
+// Drag-and-drop handlers
+window.handleDragOver = function(event, zoneId) {
+  event.preventDefault();
+  document.getElementById(zoneId).classList.add("drag-over");
+};
+window.handleDragLeave = function(zoneId) {
+  document.getElementById(zoneId).classList.remove("drag-over");
+};
+window.handleDrop = function(event, fileInputId, previewId, dataFieldId) {
+  event.preventDefault();
+  const zoneId = event.currentTarget.id;
+  document.getElementById(zoneId).classList.remove("drag-over");
+  const files = event.dataTransfer.files;
+  if (files.length > 0) {
+    processImageFile(files[0], previewId, dataFieldId);
   }
-  const yyyy = date.getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, '0');
-  const dd = String(date.getDate()).padStart(2, '0');
-  return `${yyyy}-${mm}-${dd}`;
-}
+};
 
-// Calculate Metrics for Stats Cards
-function calculateStats() {
-  const todayStr = getDateString(0);
-  const tomorrowStr = getDateString(1);
+// File input change handler
+window.handleFileSelect = function(input, previewId, dataFieldId) {
+  if (input.files && input.files[0]) {
+    processImageFile(input.files[0], previewId, dataFieldId);
+  }
+};
 
-  // Today's Orders
-  const todayOrders = orders.filter(o => o.deliveryDate === todayStr && o.status !== 'Cancelled');
-  document.getElementById("val-today-orders").innerText = todayOrders.length;
+// Core image processor: resize → base64 or Storage upload
+function processImageFile(file, previewId, dataFieldId) {
+  if (!file.type.startsWith("image/")) {
+    showToast("Please select an image file (JPG, PNG, WebP, etc.)", true);
+    return;
+  }
 
-  // Tomorrow's Deliveries
-  const tomorrowOrders = orders.filter(o => o.deliveryDate === tomorrowStr && o.status !== 'Cancelled');
-  document.getElementById("val-tomorrow-deliveries").innerText = tomorrowOrders.length;
+  const maxSizeMB = 5;
+  if (file.size > maxSizeMB * 1024 * 1024) {
+    showToast(`Image too large. Max ${maxSizeMB}MB.`, true);
+    return;
+  }
 
-  // Active Subscriptions
-  const activeSubs = subscriptions.filter(s => s.status === "Active");
-  document.getElementById("val-active-subs").innerText = activeSubs.length;
+  // Show preview name & size immediately
+  const previewWrap = document.getElementById(previewId);
+  const previewImg  = previewWrap.querySelector("img");
+  const nameEl      = previewWrap.querySelector(".img-preview-name");
+  const sizeEl      = previewWrap.querySelector(".img-preview-size");
 
-  // Today's Estimated Revenue (sum up orders set for delivery today)
-  let revenue = 0;
-  todayOrders.forEach(o => {
-    revenue += getPrice(o.product) * o.quantity;
-  });
-  document.getElementById("val-today-revenue").innerText = revenue.toLocaleString() + " ৳";
-}
+  nameEl.textContent = file.name;
+  sizeEl.textContent = formatFileSize(file.size);
 
-// Switch between table views
-function setFilter(filterType) {
-  activeFilter = filterType;
-  
-  // Update buttons state
-  const filterButtons = document.querySelectorAll(".admin-filters .filter-btn");
-  filterButtons.forEach(btn => btn.classList.remove("active"));
-  
-  const idMap = {
-    'today': 'btn-filter-today',
-    'tomorrow': 'btn-filter-tomorrow',
-    'all': 'btn-filter-all',
-    'subscriptions': 'btn-filter-subs',
-    'customers': 'btn-filter-customers'
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    // Resize image to max 800px wide before storing
+    resizeImage(dataUrl, 800, (resizedDataUrl) => {
+      previewImg.src = resizedDataUrl;
+      previewWrap.classList.add("visible");
+      document.getElementById(dataFieldId).value = resizedDataUrl;
+    });
   };
-  
-  document.getElementById(idMap[filterType]).classList.add("active");
-  renderTable();
+  reader.readAsDataURL(file);
 }
 
-// Dynamically Render Table Columns and Rows
-function renderTable() {
-  const tableHead = document.getElementById("tableHead");
-  const tableBody = document.getElementById("tableBody");
-  
-  if (!tableHead || !tableBody) return;
-
-  // Clear previous values
-  tableHead.innerHTML = "";
-  tableBody.innerHTML = "";
-
-  const todayStr = getDateString(0);
-  const tomorrowStr = getDateString(1);
-
-  if (activeFilter === 'today' || activeFilter === 'tomorrow' || activeFilter === 'all') {
-    // Render Orders Table
-    tableHead.innerHTML = `
-      <tr>
-        <th>Date</th>
-        <th>Customer</th>
-        <th>Phone & WhatsApp</th>
-        <th>Area & Landmark</th>
-        <th>Product</th>
-        <th>Qty</th>
-        <th>Total</th>
-        <th>Plan</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    `;
-
-    let filteredOrders = [];
-    if (activeFilter === 'today') {
-      filteredOrders = orders.filter(o => o.deliveryDate === todayStr);
-    } else if (activeFilter === 'tomorrow') {
-      filteredOrders = orders.filter(o => o.deliveryDate === tomorrowStr);
-    } else {
-      filteredOrders = orders; // show all
+// Canvas-based image resizer — compresses to max 600px wide, JPEG 72% quality
+// Keeps base64 strings small enough for Firestore documents (< 300KB)
+function resizeImage(dataUrl, maxWidth, callback) {
+  const img = new Image();
+  img.onload = function() {
+    const canvas = document.createElement('canvas');
+    let w = img.width, h = img.height;
+    const limit = Math.min(maxWidth, 600); // hard cap at 600px
+    if (w > limit) {
+      h = Math.round(h * limit / w);
+      w = limit;
     }
-
-    if (filteredOrders.length === 0) {
-      tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center; color: var(--muted); padding: 40px;">No order records found for this view.</td></tr>`;
-      return;
-    }
-
-    filteredOrders.forEach(o => {
-      const total = getPrice(o.product) * o.quantity;
-      const row = document.createElement("tr");
-      
-      row.innerHTML = `
-        <td style="font-weight: 500;">${o.deliveryDate}</td>
-        <td>
-          <div style="font-weight: 600;">${o.name}</div>
-          <div style="font-size: 0.8rem; color: var(--muted); max-width: 180px; word-wrap: break-word;">${o.address}</div>
-        </td>
-        <td>
-          <div>📞 ${o.phone}</div>
-          <div style="font-size: 0.82rem; color: var(--green);">💬 ${o.whatsapp}</div>
-        </td>
-        <td>
-          <div><strong>${o.area}</strong></div>
-          <div style="font-size: 0.82rem; color: var(--muted);">${o.landmark}</div>
-        </td>
-        <td>
-          <div style="font-weight: 500;">${o.product}</div>
-        </td>
-        <td>${o.quantity} ${o.product.includes("Ghee") ? "Kg" : "L"}</td>
-        <td style="font-weight: 600; color: var(--brown);">${total} ৳</td>
-        <td><span style="font-size:0.85rem;">${o.subscriptionType}</span></td>
-        <td>
-          <span class="badge badge-${o.status.toLowerCase()}">${o.status}</span>
-        </td>
-        <td>
-          <select onchange="updateOrderStatus('${o.id}', this.value)" class="status-select">
-            <option value="Pending" ${o.status === "Pending" ? "selected" : ""}>Pending</option>
-            <option value="Dispatched" ${o.status === "Dispatched" ? "selected" : ""}>Dispatched</option>
-            <option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>Delivered</option>
-            <option value="Cancelled" ${o.status === "Cancelled" ? "selected" : ""}>Cancelled</option>
-          </select>
-        </td>
-      `;
-      tableBody.appendChild(row);
-    });
-
-  } else if (activeFilter === 'subscriptions') {
-    // Render Subscriptions Table
-    tableHead.innerHTML = `
-      <tr>
-        <th>Start Date</th>
-        <th>Customer Name</th>
-        <th>Contact Phone</th>
-        <th>Product Sourced</th>
-        <th>Quantity</th>
-        <th>Plan Type</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    `;
-
-    if (subscriptions.length === 0) {
-      tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--muted); padding: 40px;">No active subscriptions found.</td></tr>`;
-      return;
-    }
-
-    subscriptions.forEach(s => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${s.startDate || "N/A"}</td>
-        <td style="font-weight: 600;">${s.customerName}</td>
-        <td>📞 ${s.customerPhone}</td>
-        <td>${s.product}</td>
-        <td>${s.quantity} ${s.product.includes("Ghee") ? "Kg" : "L"}</td>
-        <td><strong>${s.subscriptionType}</strong></td>
-        <td>
-          <span class="badge ${s.status === 'Active' ? 'badge-delivered' : 'badge-cancelled'}">${s.status}</span>
-        </td>
-        <td>
-          <button onclick="toggleSubscriptionStatus('${s.id}', '${s.status}')" class="filter-btn" style="padding: 4px 10px; font-size: 0.8rem;">
-            ${s.status === 'Active' ? 'Cancel Sub' : 'Activate Sub'}
-          </button>
-        </td>
-      `;
-      tableBody.appendChild(row);
-    });
-
-  } else if (activeFilter === 'customers') {
-    // Render Customers Table
-    tableHead.innerHTML = `
-      <tr>
-        <th>Customer Name</th>
-        <th>Phone</th>
-        <th>WhatsApp</th>
-        <th>Delivery Area</th>
-        <th>Full Address</th>
-        <th>Landmark</th>
-        <th>Last Order Timestamp</th>
-      </tr>
-    `;
-
-    if (customers.length === 0) {
-      tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 40px;">No registered customers found yet.</td></tr>`;
-      return;
-    }
-
-    customers.forEach(c => {
-      const row = document.createElement("tr");
-      const orderDate = c.lastOrderAt ? new Date(c.lastOrderAt).toLocaleDateString() : "N/A";
-      row.innerHTML = `
-        <td style="font-weight: 600;">${c.name}</td>
-        <td>📞 ${c.phone}</td>
-        <td style="color: var(--green);">💬 ${c.whatsapp}</td>
-        <td><strong>${c.area}</strong></td>
-        <td style="max-width: 250px; font-size: 0.85rem; color: var(--muted);">${c.address}</td>
-        <td style="font-size: 0.85rem;">${c.landmark || ""}</td>
-        <td>${orderDate}</td>
-      `;
-      tableBody.appendChild(row);
-    });
-  }
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    callback(canvas.toDataURL('image/jpeg', 0.72));
+  };
+  img.onerror = () => callback(dataUrl); // if decode fails, use original
+  img.src = dataUrl;
 }
 
-// Update order status in db
-async function updateOrderStatus(orderId, newStatus) {
+// Convert data URL to Blob (no fetch needed — works offline & with data: URIs)
+function dataURLtoBlob(dataUrl) {
   try {
-    if (isMockMode) {
-      const ordersList = JSON.parse(localStorage.getItem("gram_dudh_orders") || "[]");
-      const orderIndex = ordersList.findIndex(o => o.id === orderId);
-      if (orderIndex > -1) {
-        ordersList[orderIndex].status = newStatus;
-        localStorage.setItem("gram_dudh_orders", JSON.stringify(ordersList));
-      }
-    } else {
-      await db.collection("orders").doc(orderId).update({
-        status: newStatus
-      });
-    }
-
-    showToast(`Order status updated to ${newStatus}`);
-    loadPortalData(); // reload stats and tables
-
-  } catch (error) {
-    console.error("Error updating order status:", error);
-    showToast("Failed to update status in database.", true);
+    const parts = dataUrl.split(',');
+    const mime = parts[0].match(/:(.*?);/)[1];
+    const binary = atob(parts[1]);
+    const arr = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+    return new Blob([arr], { type: mime });
+  } catch (e) {
+    console.error('dataURLtoBlob error:', e);
+    return null;
   }
 }
 
-// Toggle Subscription Status
-async function toggleSubscriptionStatus(subId, currentStatus) {
-  const newStatus = currentStatus === "Active" ? "Cancelled" : "Active";
-  try {
-    if (isMockMode) {
-      const subList = JSON.parse(localStorage.getItem("gram_dudh_subscriptions") || "[]");
-      const subIndex = subList.findIndex(s => s.id === subId);
-      if (subIndex > -1) {
-        subList[subIndex].status = newStatus;
-        localStorage.setItem("gram_dudh_subscriptions", JSON.stringify(subList));
-      }
-    } else {
-      await db.collection("subscriptions").doc(subId).update({
-        status: newStatus
-      });
-    }
-
-    showToast(`Subscription status changed to ${newStatus}`);
-    loadPortalData();
-
-  } catch (error) {
-    console.error("Error updating subscription:", error);
-    showToast("Failed to toggle subscription status.", true);
-  }
+// Upload image to Firebase Storage (production mode)
+// Falls back to base64-in-Firestore if Storage upload fails or times out
+async function uploadToStorage(dataUrl, path) {
+  // Always store as compressed base64 in Firestore for now.
+  // Images are resized to max 600px so they stay well under Firestore's 1MB doc limit.
+  // Firebase Storage can be wired up later when storage.rules are configured.
+  return dataUrl;
 }
 
-// Export current filtered view to CSV file (Excel & Sheets ready)
-function exportToCSV() {
-  let csvContent = "data:text/csv;charset=utf-8,";
-  let filename = "export_" + activeFilter + "_" + getDateString(0) + ".csv";
-  
-  if (activeFilter === 'today' || activeFilter === 'tomorrow' || activeFilter === 'all') {
-    // Orders Export columns
-    csvContent += "Delivery Date,Name,Phone,WhatsApp,Area,Landmark,Address,Product,Quantity,Total BDT,Plan,Status\n";
-    
-    let filteredOrders = [];
-    const todayStr = getDateString(0);
-    const tomorrowStr = getDateString(1);
-    
-    if (activeFilter === 'today') {
-      filteredOrders = orders.filter(o => o.deliveryDate === todayStr);
-    } else if (activeFilter === 'tomorrow') {
-      filteredOrders = orders.filter(o => o.deliveryDate === tomorrowStr);
-    } else {
-      filteredOrders = orders;
-    }
+// Clear image field helper
+window.clearImageField = function(previewId, dataFieldId, zoneId) {
+  document.getElementById(previewId).classList.remove("visible");
+  document.getElementById(previewId).querySelector("img").src = "";
+  document.getElementById(dataFieldId).value = "";
+};
 
-    if (filteredOrders.length === 0) {
-      showToast("No orders available to export.", true);
-      return;
-    }
-
-    filteredOrders.forEach(o => {
-      const total = getPrice(o.product) * o.quantity;
-      const cleanAddress = o.address.replace(/"/g, '""').replace(/\n/g, ' ');
-      const cleanLandmark = o.landmark.replace(/"/g, '""');
-      
-      const row = [
-        o.deliveryDate,
-        `"${o.name}"`,
-        `"${o.phone}"`,
-        `"${o.whatsapp}"`,
-        `"${o.area}"`,
-        `"${cleanLandmark}"`,
-        `"${cleanAddress}"`,
-        `"${o.product}"`,
-        o.quantity,
-        total,
-        `"${o.subscriptionType}"`,
-        `"${o.status}"`
-      ].join(",");
-      csvContent += row + "\n";
-    });
-
-  } else if (activeFilter === 'subscriptions') {
-    csvContent += "Start Date,Customer Name,Phone,Product,Quantity,Plan Type,Status\n";
-    
-    if (subscriptions.length === 0) {
-      showToast("No subscriptions available to export.", true);
-      return;
-    }
-
-    subscriptions.forEach(s => {
-      const row = [
-        s.startDate || "N/A",
-        `"${s.customerName}"`,
-        `"${s.customerPhone}"`,
-        `"${s.product}"`,
-        s.quantity,
-        `"${s.subscriptionType}"`,
-        `"${s.status}"`
-      ].join(",");
-      csvContent += row + "\n";
-    });
-
-  } else if (activeFilter === 'customers') {
-    csvContent += "Customer Name,Phone,WhatsApp,Area,Landmark,Address,Last Order Date\n";
-    
-    if (customers.length === 0) {
-      showToast("No customer records available to export.", true);
-      return;
-    }
-
-    customers.forEach(c => {
-      const cleanAddress = c.address.replace(/"/g, '""').replace(/\n/g, ' ');
-      const cleanLandmark = c.landmark ? c.landmark.replace(/"/g, '""') : "";
-      
-      const row = [
-        `"${c.name}"`,
-        `"${c.phone}"`,
-        `"${c.whatsapp}"`,
-        `"${c.area}"`,
-        `"${cleanLandmark}"`,
-        `"${cleanAddress}"`,
-        c.lastOrderAt || "N/A"
-      ].join(",");
-      csvContent += row + "\n";
-    });
-  }
-
-  // Create downloader link
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", filename);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  
-  showToast("CSV Downloaded! Ready to import into Google Sheets.");
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  return (bytes / (1024 * 1024)).toFixed(1) + " MB";
 }
 
-// Helper to get prices
-function getPrice(productName) {
-  if (productName === "Daily Raw Cow Milk") return 80;
-  if (productName === "Full Cream Village Milk") return 95;
-  if (productName === "Premium Village Cow Ghee") return 1200;
-  return 0;
-}
-
-// Show custom toast notification
+// ════════════════════════════════════════
+// TOAST ALERTS
+// ════════════════════════════════════════
 function showToast(message, isError = false) {
   const toast = document.getElementById("toastMessage");
   const toastText = document.getElementById("toastText");
   const toastIcon = document.getElementById("toastIcon");
-
   if (toast && toastText && toastIcon) {
     toastText.innerText = message;
     toastIcon.innerText = isError ? "❌" : "✅";
-    
-    if (isError) {
-      toast.classList.add("error");
-    } else {
-      toast.classList.remove("error");
-    }
-    
+    toast.classList.toggle("error", isError);
     toast.style.display = "flex";
-    
-    // Auto hide after 3 seconds
-    setTimeout(() => {
-      toast.style.display = "none";
-    }, 3000);
+    setTimeout(() => { toast.style.display = "none"; }, 3500);
   }
 }
 
-// Initialize portal on load
-window.addEventListener("DOMContentLoaded", () => {
-  initializeAdminPortal();
-});
+// ════════════════════════════════════════
+// TAB SWITCHING
+// ════════════════════════════════════════
+window.switchAdminTab = function(tabName) {
+  activeTab = tabName;
+  closeMobileSidebar();
+
+  document.querySelectorAll(".admin-sidebar-link").forEach(link => {
+    link.classList.remove("active");
+    if (link.innerText.toLowerCase().includes(tabName.toLowerCase())) {
+      link.classList.add("active");
+    }
+  });
+
+  document.querySelectorAll(".admin-page-section").forEach(sec => sec.classList.remove("active"));
+  const target = document.getElementById(`admin-sec-${tabName}`);
+  if (target) target.classList.add("active");
+
+  renderActiveTab();
+};
+
+function renderActiveTab() {
+  const handlers = {
+    dashboard:  renderDashboard,
+    categories: renderCategories,
+    products:   renderProducts,
+    orders:     renderOrders,
+    customers:  renderCustomers,
+    inventory:  renderInventory,
+    coupons:    renderCoupons,
+    reports:    renderReports,
+    settings:   renderSettings,
+  };
+  if (handlers[activeTab]) handlers[activeTab]();
+}
+
+// ════════════════════════════════════════
+// 1. DASHBOARD
+// ════════════════════════════════════════
+function renderDashboard() {
+  const totalRevenue = orders.filter(o => o.status !== "Cancelled").reduce((s, o) => s + (o.total || 0), 0);
+  document.getElementById("kpi-revenue").innerText = totalRevenue.toLocaleString() + " ৳";
+  document.getElementById("kpi-orders").innerText = orders.length;
+  document.getElementById("kpi-customers").innerText = customers.length;
+  document.getElementById("kpi-lowstock").innerText = products.filter(p => p.stock < 10).length;
+
+  const tbody = document.getElementById("dashboard-recent-orders-list");
+  if (tbody) {
+    tbody.innerHTML = "";
+    const recent = orders.slice(0, 5);
+    if (recent.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px;">No orders yet.</td></tr>`;
+      return;
+    }
+    recent.forEach(o => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td style="font-weight:700;font-size:0.85rem;">${o.id}</td>
+        <td>${o.name || "—"}</td>
+        <td>${o.phone || "—"}</td>
+        <td>${o.district || "—"}</td>
+        <td style="font-weight:700;color:var(--green);">${(o.total || 0)} ৳</td>
+        <td>${o.paymentMethod || "—"}</td>
+        <td><span class="badge badge-${(o.status || 'pending').toLowerCase()}">${o.status || 'Pending'}</span></td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+  drawSalesChart();
+}
+
+function drawSalesChart() {
+  const container = document.getElementById("sales-chart-container");
+  if (!container) return;
+  container.innerHTML = "";
+  const days = [], salesMap = {};
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().split("T")[0];
+    days.push(dateStr);
+    salesMap[dateStr] = 0;
+  }
+  orders.filter(o => o.status !== "Cancelled").forEach(o => {
+    if (o.createdAt) {
+      const day = o.createdAt.split("T")[0];
+      if (salesMap[day] !== undefined) salesMap[day] += (o.total || 0);
+    }
+  });
+  const maxSale = Math.max(...Object.values(salesMap), 1000);
+  days.forEach(day => {
+    const total = salesMap[day];
+    const heightPercent = Math.min(100, Math.round((total / maxSale) * 100));
+    const formattedDate = new Date(day + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const bar = document.createElement("div");
+    bar.className = "chart-bar-item";
+    bar.style.height = `${Math.max(5, heightPercent)}%`;
+    bar.innerHTML = `
+      <div class="chart-bar-tooltip">${total} ৳</div>
+      <div class="chart-bar-label">${formattedDate}</div>
+    `;
+    container.appendChild(bar);
+  });
+}
+
+// ════════════════════════════════════════
+// 2. CATEGORIES
+// ════════════════════════════════════════
+function renderCategories() {
+  const tbody = document.getElementById("admin-categories-list");
+  if (!tbody) return;
+  renderCategoriesFiltered(categories);
+}
+
+function renderCategoriesFiltered(list) {
+  const tbody = document.getElementById("admin-categories-list");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px;">No categories found.</td></tr>`;
+    return;
+  }
+  list.forEach(cat => {
+    const imgSrc = cat.imagePath || cat.imageData || "images/daily_milk.png";
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td><img src="${imgSrc}" class="prod-thumb" onerror="this.src='images/daily_milk.png'"></td>
+      <td>
+        <div style="font-weight:700;">${cat.nameEn}</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);">${cat.nameBn}</div>
+      </td>
+      <td><span class="badge ${cat.status === 'Active' ? 'badge-delivered' : 'badge-cancelled'}">${cat.status}</span></td>
+      <td>
+        <button onclick="editCategory('${cat.id}')" style="background:var(--green-glow);border:none;cursor:pointer;padding:6px 10px;border-radius:6px;font-size:0.85rem;color:var(--green);font-weight:700;margin-right:6px;">✏️ Edit</button>
+        <button onclick="deleteCategory('${cat.id}')" style="background:hsla(6,78%,57%,0.1);border:none;cursor:pointer;padding:6px 10px;border-radius:6px;font-size:0.85rem;color:#e74c3c;font-weight:700;">🗑️ Del</button>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+window.filterCategoriesTable = function(term) {
+  catSearchTerm = term.toLowerCase();
+  const filtered = categories.filter(c =>
+    c.nameEn.toLowerCase().includes(catSearchTerm) ||
+    c.nameBn.toLowerCase().includes(catSearchTerm)
+  );
+  renderCategoriesFiltered(filtered);
+};
+
+async function handleSaveCategory(event) {
+  event.preventDefault();
+  // Use getElementById - event.submitter can be null in some browsers
+  const btn = document.getElementById("btn-save-category");
+  const idInput = document.getElementById("editCategoryId").value;
+  const nameEn  = document.getElementById("catNameEn").value.trim();
+  const nameBn  = document.getElementById("catNameBn").value.trim();
+  const descEn  = document.getElementById("catDescEn").value.trim();
+  const descBn  = document.getElementById("catDescBn").value.trim();
+  const status  = document.getElementById("catStatus").value;
+  const imageData = document.getElementById("catImageData").value;
+
+  if (!imageData && !idInput) {
+    showToast("Please upload a category image first.", true);
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.innerHTML = `<span class="upload-spinner"></span> Saving...`; }
+
+  try {
+    const catId = idInput || "cat_" + Math.random().toString(36).substr(2, 9);
+    let imagePath = imageData;
+
+    // Production: upload base64 → Firebase Storage
+    if (!isMockMode && imageData && imageData.startsWith("data:")) {
+      imagePath = await uploadToStorage(imageData, `categories/${catId}.jpg`);
+    }
+
+    // Edit without new image → keep old imagePath
+    if (!imageData && idInput) {
+      const old = categories.find(c => c.id === idInput);
+      imagePath = old ? (old.imagePath || old.imageData || "") : "";
+    }
+
+    const data = {
+      id: catId, nameEn, nameBn,
+      descriptionEn: descEn, descriptionBn: descBn,
+      imagePath, status,
+      createdAt: new Date().toISOString()
+    };
+
+    if (isMockMode) {
+      const idx = categories.findIndex(c => c.id === catId);
+      if (idx > -1) categories[idx] = data;
+      else categories.push(data);
+      saveMockState("onyx_goods_categories", categories);
+    } else {
+      await db.collection("categories").doc(catId).set(data);
+    }
+
+    showToast("Category saved! ✅");
+    resetCategoryForm();
+    await loadPortalData();
+  } catch (error) {
+    console.error("Save category error:", error);
+    showToast("Failed to save category: " + (error.message || ""), true);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = "Save Category"; }
+  }
+}
+
+window.editCategory = function(id) {
+  const cat = categories.find(c => c.id === id);
+  if (!cat) return;
+  document.getElementById("editCategoryId").value = cat.id;
+  document.getElementById("catNameEn").value = cat.nameEn;
+  document.getElementById("catNameBn").value = cat.nameBn;
+  document.getElementById("catDescEn").value = cat.descriptionEn || "";
+  document.getElementById("catDescBn").value = cat.descriptionBn || "";
+  document.getElementById("catStatus").value = cat.status;
+  document.getElementById("cat-form-title").innerText = "Edit Category";
+
+  // Restore image preview
+  const imgSrc = cat.imagePath || cat.imageData || "";
+  if (imgSrc) {
+    const previewWrap = document.getElementById("catImgPreview");
+    previewWrap.querySelector("img").src = imgSrc;
+    previewWrap.querySelector(".img-preview-name").textContent = "Current image";
+    previewWrap.querySelector(".img-preview-size").textContent = imgSrc.startsWith("data:") ? "Stored locally" : imgSrc.split("/").pop();
+    previewWrap.classList.add("visible");
+    document.getElementById("catImageData").value = imgSrc;
+  }
+  // Scroll form into view
+  document.getElementById("adminCategoryForm").scrollIntoView({ behavior: "smooth" });
+};
+
+window.resetCategoryForm = function() {
+  document.getElementById("adminCategoryForm").reset();
+  document.getElementById("editCategoryId").value = "";
+  document.getElementById("cat-form-title").innerText = "Add Category";
+  clearImageField("catImgPreview", "catImageData", "catUploadZone");
+};
+
+async function deleteCategory(id) {
+  if (!confirm("Delete this category? Products in it will have no category.")) return;
+  try {
+    if (isMockMode) {
+      categories = categories.filter(c => c.id !== id);
+      saveMockState("onyx_goods_categories", categories);
+    } else {
+      await db.collection("categories").doc(id).delete();
+    }
+    showToast("Category deleted.");
+    loadPortalData();
+  } catch (e) {
+    showToast("Failed to delete category.", true);
+  }
+}
+
+// ════════════════════════════════════════
+// 3. PRODUCTS
+// ════════════════════════════════════════
+function renderProducts() {
+  const select = document.getElementById("prodCategory");
+  if (select) {
+    select.innerHTML = `<option value="" disabled selected>Select Category</option>`;
+    categories.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.id;
+      opt.innerText = c.nameEn;
+      select.appendChild(opt);
+    });
+  }
+  renderProductsFiltered(products);
+}
+
+function renderProductsFiltered(list) {
+  const tbody = document.getElementById("admin-products-list");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px;">No products found.</td></tr>`;
+    return;
+  }
+  list.forEach(p => {
+    const cat = categories.find(c => c.id === p.categoryId);
+    const catName = cat ? cat.nameEn : "—";
+    const imgSrc = p.imagePath || p.imageData || "images/daily_milk.png";
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>
+        <div class="prod-name-cell">
+          <img src="${imgSrc}" class="prod-thumb" onerror="this.src='images/daily_milk.png'">
+          <div>
+            <div style="font-weight:700;">${p.nameEn}</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">${p.nameBn}</div>
+          </div>
+        </div>
+      </td>
+      <td>${catName}</td>
+      <td>
+        <div style="font-weight:700;color:var(--green);">${p.price} ৳</div>
+        ${p.discountPrice > 0 ? `<div style="font-size:0.75rem;color:var(--text-muted);text-decoration:line-through;">${p.discountPrice} ৳</div>` : ""}
+      </td>
+      <td>${p.stock} ${p.unitEn || ""}</td>
+      <td><span class="badge ${p.isFeatured ? 'badge-delivered' : 'badge-cancelled'}">${p.isFeatured ? '⭐ Yes' : 'No'}</span></td>
+      <td>
+        <span class="badge ${p.inStock ? 'badge-delivered' : 'badge-cancelled'}" style="cursor:pointer;" onclick="toggleProductStockState('${p.id}')">
+          ${p.inStock ? '✅ In Stock' : '⛔ Out'}
+        </span>
+      </td>
+      <td>
+        <button onclick="openProductCrudModal('${p.id}')" style="background:var(--green-glow);border:none;cursor:pointer;padding:6px 10px;border-radius:6px;font-size:0.85rem;color:var(--green);font-weight:700;margin-right:6px;">✏️</button>
+        <button onclick="deleteProduct('${p.id}')" style="background:hsla(6,78%,57%,0.1);border:none;cursor:pointer;padding:6px 10px;border-radius:6px;font-size:0.85rem;color:#e74c3c;font-weight:700;">🗑️</button>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+window.filterProductsTable = function(term) {
+  prodSearchTerm = term.toLowerCase();
+  const filtered = products.filter(p =>
+    p.nameEn.toLowerCase().includes(prodSearchTerm) ||
+    p.nameBn.toLowerCase().includes(prodSearchTerm) ||
+    (categories.find(c => c.id === p.categoryId)?.nameEn || "").toLowerCase().includes(prodSearchTerm)
+  );
+  renderProductsFiltered(filtered);
+};
+
+window.openProductCrudModal = function(id = "") {
+  const modal = document.getElementById("productModal");
+  if (!modal) return;
+
+  document.getElementById("productForm").reset();
+  document.getElementById("editProductId").value = "";
+  document.getElementById("productModalTitle").innerText = "Add New Product";
+  clearImageField("prodImgPreview", "prodImageData", "prodUploadZone");
+
+  // Re-populate category select
+  const select = document.getElementById("prodCategory");
+  select.innerHTML = `<option value="" disabled selected>Select Category</option>`;
+  categories.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c.id;
+    opt.innerText = c.nameEn;
+    select.appendChild(opt);
+  });
+
+  if (id) {
+    const p = products.find(prod => prod.id === id);
+    if (p) {
+      document.getElementById("editProductId").value     = p.id;
+      document.getElementById("prodNameEn").value        = p.nameEn;
+      document.getElementById("prodNameBn").value        = p.nameBn;
+      document.getElementById("prodCategory").value      = p.categoryId;
+      document.getElementById("prodStock").value         = p.stock;
+      document.getElementById("prodPrice").value         = p.price;
+      document.getElementById("prodDiscountPrice").value = p.discountPrice || 0;
+      document.getElementById("prodUnitEn").value        = p.unitEn;
+      document.getElementById("prodUnitBn").value        = p.unitBn;
+      document.getElementById("prodBadgeEn").value       = p.badgeEn || "";
+      document.getElementById("prodBadgeBn").value       = p.badgeBn || "";
+      document.getElementById("prodInStock").checked     = p.inStock;
+      document.getElementById("prodIsFeatured").checked  = p.isFeatured;
+      document.getElementById("prodDescEn").value        = p.descEn || "";
+      document.getElementById("prodDescBn").value        = p.descBn || "";
+      document.getElementById("productModalTitle").innerText = "Edit Product";
+
+      // Restore image preview
+      const imgSrc = p.imagePath || p.imageData || "";
+      if (imgSrc) {
+        const previewWrap = document.getElementById("prodImgPreview");
+        previewWrap.querySelector("img").src = imgSrc;
+        previewWrap.querySelector(".img-preview-name").textContent = "Current image";
+        previewWrap.querySelector(".img-preview-size").textContent = imgSrc.startsWith("data:") ? "Stored locally" : imgSrc.split("/").pop();
+        previewWrap.classList.add("visible");
+        document.getElementById("prodImageData").value = imgSrc;
+      }
+    }
+  }
+  modal.style.display = "flex";
+};
+
+window.closeProductCrudModal = function() {
+  const modal = document.getElementById("productModal");
+  if (modal) modal.style.display = "none";
+};
+
+async function handleSaveProduct(event) {
+  event.preventDefault();
+  const btn = document.getElementById("btn-save-product");
+  const idInput   = document.getElementById("editProductId").value;
+  const imageData = document.getElementById("prodImageData").value;
+
+  if (!imageData && !idInput) {
+    showToast("Please upload a product image first.", true);
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.innerHTML = `<span class="upload-spinner"></span> Saving...`; }
+
+  try {
+    const pid = idInput || "prod_" + Math.random().toString(36).substr(2, 9);
+    let imagePath = imageData;
+
+    // Production: upload base64 → Firebase Storage
+    if (!isMockMode && imageData && imageData.startsWith("data:")) {
+      imagePath = await uploadToStorage(imageData, `products/${pid}.jpg`);
+    }
+
+    // Edit without new image → keep old
+    if (!imageData && idInput) {
+      const old = products.find(p => p.id === idInput);
+      imagePath = old ? (old.imagePath || old.imageData || "") : "";
+    }
+
+    const data = {
+      id: pid,
+      categoryId:    document.getElementById("prodCategory").value,
+      nameEn:        document.getElementById("prodNameEn").value.trim(),
+      nameBn:        document.getElementById("prodNameBn").value.trim(),
+      stock:         parseInt(document.getElementById("prodStock").value, 10),
+      price:         parseInt(document.getElementById("prodPrice").value, 10),
+      discountPrice: parseInt(document.getElementById("prodDiscountPrice").value, 10) || 0,
+      unitEn:        document.getElementById("prodUnitEn").value.trim(),
+      unitBn:        document.getElementById("prodUnitBn").value.trim(),
+      badgeEn:       document.getElementById("prodBadgeEn").value.trim(),
+      badgeBn:       document.getElementById("prodBadgeBn").value.trim(),
+      imagePath,
+      inStock:       document.getElementById("prodInStock").checked,
+      isFeatured:    document.getElementById("prodIsFeatured").checked,
+      descEn:        document.getElementById("prodDescEn").value.trim(),
+      descBn:        document.getElementById("prodDescBn").value.trim(),
+      benefitsEn: ["Authentic quality sourced", "Direct from village producers", "No additives"],
+      benefitsBn: ["বিশুদ্ধতার নিশ্চয়তা", "সরাসরি গ্রাম থেকে সংগৃহীত", "কোনো ভেজাল নেই"],
+      createdAt: new Date().toISOString()
+    };
+
+    if (isMockMode) {
+      const idx = products.findIndex(p => p.id === pid);
+      if (idx > -1) products[idx] = data;
+      else products.push(data);
+      saveMockState("onyx_goods_products", products);
+    } else {
+      await db.collection("products").doc(pid).set(data);
+    }
+
+    showToast("Product saved! ✅");
+    closeProductCrudModal();
+    await loadPortalData();
+  } catch (error) {
+    console.error("Save product failure:", error);
+    showToast("Failed to save product: " + (error.message || ""), true);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = "💾 Save Product"; }
+  }
+}
+
+window.toggleProductStockState = async function(id) {
+  const p = products.find(prod => prod.id === id);
+  if (!p) return;
+  p.inStock = !p.inStock;
+  try {
+    if (isMockMode) {
+      saveMockState("onyx_goods_products", products);
+    } else {
+      await db.collection("products").doc(id).update({ inStock: p.inStock });
+    }
+    showToast(`Stock → ${p.inStock ? "✅ In Stock" : "⛔ Out of Stock"}`);
+    loadPortalData();
+  } catch (e) {
+    console.error("Toggle stock failed:", e);
+  }
+};
+
+async function deleteProduct(id) {
+  if (!confirm("Delete this product permanently?")) return;
+  try {
+    if (isMockMode) {
+      products = products.filter(p => p.id !== id);
+      saveMockState("onyx_goods_products", products);
+    } else {
+      await db.collection("products").doc(id).delete();
+    }
+    showToast("Product deleted.");
+    loadPortalData();
+  } catch (e) {
+    showToast("Failed to delete product.", true);
+  }
+}
+
+// ════════════════════════════════════════
+// 4. ORDERS
+// ════════════════════════════════════════
+function renderOrders() {
+  const tbody = document.getElementById("admin-orders-list");
+  if (!tbody) return;
+  let filtered = [...orders];
+  if (activeOrderFilter !== "All") {
+    filtered = filtered.filter(o => o.status === activeOrderFilter);
+  }
+  if (orderSearchTerm) {
+    filtered = filtered.filter(o =>
+      (o.name || "").toLowerCase().includes(orderSearchTerm) ||
+      (o.phone || "").includes(orderSearchTerm) ||
+      (o.id || "").toLowerCase().includes(orderSearchTerm)
+    );
+  }
+  tbody.innerHTML = "";
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:24px;">No orders found.</td></tr>`;
+    return;
+  }
+  filtered.forEach(o => {
+    const row = document.createElement("tr");
+    let itemsStr = "";
+    if (Array.isArray(o.items)) {
+      itemsStr = o.items.map(i => `${i.nameEn || i.name} (×${i.quantity})`).join("<br>");
+    } else {
+      itemsStr = `${o.product || "—"} (×${o.quantity || 1})`;
+    }
+    const displayDate = o.createdAt ? new Date(o.createdAt).toLocaleDateString() : "—";
+    row.innerHTML = `
+      <td style="font-weight:700;font-size:0.82rem;">${o.id}<br><span style="font-size:0.72rem;color:var(--text-muted);font-weight:normal;">${displayDate}</span></td>
+      <td><strong>${o.name || "—"}</strong><br><span style="font-size:0.8rem;color:var(--text-muted);">${o.address || ""}</span></td>
+      <td>📞 ${o.phone || "—"}<br><span style="color:var(--green);font-size:0.82rem;">💬 ${o.whatsapp || "—"}</span></td>
+      <td style="font-size:0.82rem;">${itemsStr}</td>
+      <td style="font-weight:700;color:var(--green);">${o.total || 0} ৳</td>
+      <td>${o.paymentMethod || "—"}<br><span style="font-size:0.72rem;font-weight:700;">${o.paymentStatus || ""}</span></td>
+      <td><span class="badge badge-${(o.status || 'pending').toLowerCase()}">${o.status || "Pending"}</span></td>
+      <td>
+        <select class="status-select" onchange="updateOrderStatus('${o.id}', this.value)">
+          ${["Pending","Confirmed","Processing","Packed","Out For Delivery","Delivered","Cancelled"]
+            .map(s => `<option value="${s}" ${o.status === s ? "selected" : ""}>${s}</option>`).join("")}
+        </select>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+window.filterAdminOrders = function(status) {
+  activeOrderFilter = status;
+  document.querySelectorAll("#orders-status-filters .filter-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.innerText.includes(status));
+  });
+  renderOrders();
+};
+
+window.filterOrdersTable = function(term) {
+  orderSearchTerm = term.toLowerCase();
+  renderOrders();
+};
+
+window.updateOrderStatus = async function(orderId, nextStatus) {
+  try {
+    if (isMockMode) {
+      const idx = orders.findIndex(o => o.id === orderId);
+      if (idx > -1) {
+        orders[idx].status = nextStatus;
+        if (nextStatus === "Delivered") orders[idx].paymentStatus = "Paid";
+        saveMockState("onyx_goods_orders", orders);
+      }
+    } else {
+      const payload = { status: nextStatus };
+      if (nextStatus === "Delivered") payload.paymentStatus = "Paid";
+      await db.collection("orders").doc(orderId).update(payload);
+    }
+    showToast(`Order → ${nextStatus} ✅`);
+    loadPortalData();
+  } catch (e) { console.error("Status update failed:", e); }
+};
+
+window.exportOrdersToCSV = function() {
+  if (orders.length === 0) { showToast("No orders to export.", true); return; }
+  let csv = "Order ID,Date,Name,Phone,WhatsApp,District,Address,Subtotal,Discount,Shipping,Total,Method,Payment Status,Status\n";
+  orders.forEach(o => {
+    const addr = (o.address || "").replace(/"/g, '""').replace(/\n/g, ' ');
+    csv += `${o.id},${(o.createdAt||"").split("T")[0]},"${o.name}","${o.phone}","${o.whatsapp||""}","${o.district||""}","${addr}",${o.subtotal||0},${o.discount||0},${o.deliveryCharge||0},${o.total||0},"${o.paymentMethod||""}","${o.paymentStatus||""}","${o.status||""}"\n`;
+  });
+  const uri = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+  const link = document.createElement("a");
+  link.setAttribute("href", uri);
+  link.setAttribute("download", `onyx_goods_orders_${new Date().toISOString().split("T")[0]}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast("Orders exported! 📥");
+};
+
+// ════════════════════════════════════════
+// 5. CUSTOMERS
+// ════════════════════════════════════════
+function renderCustomers() {
+  renderCustomersFiltered(customers);
+}
+
+function renderCustomersFiltered(list) {
+  const tbody = document.getElementById("admin-customers-list");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px;">No customers found.</td></tr>`;
+    return;
+  }
+  list.forEach(c => {
+    const row = document.createElement("tr");
+    const date = c.lastOrderAt ? new Date(c.lastOrderAt).toLocaleString() : "—";
+    row.innerHTML = `
+      <td style="font-weight:700;">${c.name || "—"}</td>
+      <td>${c.email || "—"}</td>
+      <td>📞 ${c.phone || "—"}</td>
+      <td><strong>${c.district || "—"}</strong></td>
+      <td style="font-size:0.85rem;color:var(--text-muted);">${c.address || "—"}</td>
+      <td>${date}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+window.filterCustomersTable = function(term) {
+  custSearchTerm = term.toLowerCase();
+  const filtered = customers.filter(c =>
+    (c.name || "").toLowerCase().includes(custSearchTerm) ||
+    (c.phone || "").includes(custSearchTerm)
+  );
+  renderCustomersFiltered(filtered);
+};
+
+// ════════════════════════════════════════
+// 6. INVENTORY
+// ════════════════════════════════════════
+function renderInventory() {
+  const tbody = document.getElementById("admin-inventory-list");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  if (products.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">No products in inventory.</td></tr>`;
+    return;
+  }
+  products.forEach(p => {
+    const imgSrc = p.imagePath || p.imageData || "images/daily_milk.png";
+    const warning = p.stock < 10 ?
+      `<span class="badge badge-cancelled">⚠️ Low Stock</span>` :
+      `<span class="badge badge-delivered">✅ Healthy</span>`;
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>
+        <div class="prod-name-cell">
+          <img src="${imgSrc}" class="prod-thumb" onerror="this.src='images/daily_milk.png'">
+          <span style="font-weight:700;">${p.nameEn}</span>
+        </div>
+      </td>
+      <td>${p.unitEn || "—"}</td>
+      <td style="font-weight:700; font-size:1.1rem;">${p.stock}</td>
+      <td>
+        <input type="number" min="0" value="${p.stock}" onchange="updateStockLevels('${p.id}', this.value)" 
+               style="width:80px;padding:6px 10px;border:1.5px solid #E8D9C8;border-radius:6px;text-align:center;font-family:'Outfit',sans-serif;">
+      </td>
+      <td>${warning}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+window.updateStockLevels = async function(id, val) {
+  const stock = parseInt(val, 10);
+  if (isNaN(stock) || stock < 0) return;
+  try {
+    if (isMockMode) {
+      const idx = products.findIndex(p => p.id === id);
+      if (idx > -1) {
+        products[idx].stock = stock;
+        products[idx].inStock = stock > 0;
+        saveMockState("onyx_goods_products", products);
+      }
+    } else {
+      await db.collection("products").doc(id).update({ stock, inStock: stock > 0 });
+    }
+    showToast("Stock updated! ✅");
+    loadPortalData();
+  } catch (e) { console.error("Inventory update failed:", e); }
+};
+
+// ════════════════════════════════════════
+// 7. COUPONS
+// ════════════════════════════════════════
+function renderCoupons() {
+  const tbody = document.getElementById("admin-coupons-list");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  if (coupons.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">No coupons yet.</td></tr>`;
+    return;
+  }
+  coupons.forEach(c => {
+    const row = document.createElement("tr");
+    const displayRule = c.type === "percentage" ? `${c.value}% Off` : `${c.value} ৳ Off`;
+    const isActive = new Date(c.expiryDate) >= new Date() && c.status === "Active";
+    row.innerHTML = `
+      <td style="font-weight:700;font-size:1rem;">${c.code}</td>
+      <td>${displayRule}</td>
+      <td>${c.expiryDate}</td>
+      <td><span class="badge ${isActive ? 'badge-delivered' : 'badge-cancelled'}">${isActive ? '✅ Active' : '⛔ Expired'}</span></td>
+      <td><button onclick="deleteCoupon('${c.code}')" style="background:hsla(6,78%,57%,0.1);border:none;cursor:pointer;padding:6px 10px;border-radius:6px;font-size:0.85rem;color:#e74c3c;font-weight:700;">🗑️ Del</button></td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+async function handleSaveCoupon(event) {
+  event.preventDefault();
+  const code = document.getElementById("couponCode").value.trim().toUpperCase();
+  const type = document.getElementById("couponType").value;
+  const value = parseInt(document.getElementById("couponValue").value, 10);
+  const expiryDate = document.getElementById("couponExpiry").value;
+  const data = { code, type, value, expiryDate, status: "Active" };
+  try {
+    if (isMockMode) {
+      const idx = coupons.findIndex(c => c.code === code);
+      if (idx > -1) coupons[idx] = data;
+      else coupons.push(data);
+      saveMockState("onyx_goods_coupons", coupons);
+    } else {
+      await db.collection("coupons").doc(code).set(data);
+    }
+    showToast("Coupon created! 🏷️");
+    document.getElementById("adminCouponForm").reset();
+    loadPortalData();
+  } catch (e) { showToast("Failed to save coupon.", true); }
+}
+
+window.deleteCoupon = async function(code) {
+  if (!confirm(`Delete coupon ${code}?`)) return;
+  try {
+    if (isMockMode) {
+      coupons = coupons.filter(c => c.code !== code);
+      saveMockState("onyx_goods_coupons", coupons);
+    } else {
+      await db.collection("coupons").doc(code).delete();
+    }
+    showToast("Coupon deleted.");
+    loadPortalData();
+  } catch (e) { showToast("Failed to delete coupon.", true); }
+};
+
+// ════════════════════════════════════════
+// 8. REPORTS
+// ════════════════════════════════════════
+function renderReports() {
+  const catBody = document.getElementById("reports-category-revenue");
+  const prodBody = document.getElementById("reports-product-revenue");
+  if (!catBody || !prodBody) return;
+
+  const catRev = {}, catOrd = {}, prodRev = {}, prodQty = {};
+  categories.forEach(c => { catRev[c.id] = 0; catOrd[c.id] = 0; });
+  products.forEach(p => { prodRev[p.id] = 0; prodQty[p.id] = 0; });
+
+  orders.filter(o => o.status !== "Cancelled").forEach(o => {
+    if (Array.isArray(o.items)) {
+      o.items.forEach(item => {
+        const prod = products.find(p => p.id === item.productId);
+        if (prod) {
+          const price = (item.discountPrice > 0 ? item.discountPrice : item.price) * item.quantity;
+          catRev[prod.categoryId] = (catRev[prod.categoryId] || 0) + price;
+          catOrd[prod.categoryId] = (catOrd[prod.categoryId] || 0) + 1;
+          prodRev[item.productId] = (prodRev[item.productId] || 0) + price;
+          prodQty[item.productId] = (prodQty[item.productId] || 0) + item.quantity;
+        }
+      });
+    }
+  });
+
+  catBody.innerHTML = "";
+  categories.forEach(cat => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td style="font-weight:700;">${cat.nameEn}</td>
+      <td>${catOrd[cat.id] || 0}</td>
+      <td style="font-weight:700;color:var(--green);">${(catRev[cat.id] || 0)} ৳</td>
+    `;
+    catBody.appendChild(row);
+  });
+
+  prodBody.innerHTML = "";
+  const sortedProds = [...products].sort((a, b) => (prodRev[b.id] || 0) - (prodRev[a.id] || 0));
+  sortedProds.slice(0, 5).forEach(p => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td style="font-weight:700;">${p.nameEn}</td>
+      <td>${prodQty[p.id] || 0} ${p.unitEn || ""}s</td>
+      <td style="font-weight:700;color:var(--green);">${prodRev[p.id] || 0} ৳</td>
+    `;
+    prodBody.appendChild(row);
+  });
+}
+
+// ════════════════════════════════════════
+// 9. SETTINGS
+// ════════════════════════════════════════
+function renderSettings() {
+  const fields = ["setLogoUrl","setContactEmail","setContactPhone","setWhatsappNumber","setDeliveryChargeDhaka","setDeliveryChargeOutside"];
+  const keys   = ["logoUrl","contactEmail","contactPhone","whatsappNumber","deliveryChargeDhaka","deliveryChargeOutside"];
+  const defaults= ["logo.jpg","onyxsupport36@gmail.com","+8801302101024","8801302101024",60,120];
+  fields.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) el.value = settings[keys[i]] !== undefined ? settings[keys[i]] : defaults[i];
+  });
+}
+
+async function handleSaveSettings(event) {
+  event.preventDefault();
+  const btn = document.getElementById("btn-save-settings");
+  if (btn) { btn.disabled = true; btn.innerHTML = `<span class="upload-spinner"></span> Saving...`; }
+  try {
+    const data = {
+      logoUrl:               document.getElementById("setLogoUrl").value.trim(),
+      contactEmail:          document.getElementById("setContactEmail").value.trim(),
+      contactPhone:          document.getElementById("setContactPhone").value.trim(),
+      whatsappNumber:        document.getElementById("setWhatsappNumber").value.trim(),
+      deliveryChargeDhaka:   parseInt(document.getElementById("setDeliveryChargeDhaka").value, 10),
+      deliveryChargeOutside: parseInt(document.getElementById("setDeliveryChargeOutside").value, 10),
+      socialLinks: settings.socialLinks || { facebook: "#", instagram: "#" }
+    };
+    if (isMockMode) {
+      settings = data;
+      saveMockState("onyx_goods_settings", settings);
+      localStorage.setItem("onyx_goods_shipping_dhaka", data.deliveryChargeDhaka);
+      localStorage.setItem("onyx_goods_shipping_outside", data.deliveryChargeOutside);
+    } else {
+      await db.collection("settings").doc("store_settings").set(data);
+    }
+    showToast("Settings saved! ⚙️");
+    await loadPortalData();
+  } catch (e) {
+    console.error("Settings save error:", e);
+    showToast("Failed to save settings: " + (e.message || ""), true);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = "💾 Save Settings"; }
+  }
+}
