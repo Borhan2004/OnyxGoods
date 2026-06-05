@@ -37,7 +37,7 @@ To make development and previewing immediate, the application comes with a built
 2. Place a few orders on the website.
 3. Access `/admin` (or `admin.html`) to manage them.
 4. Log in with the testing credentials:
-   - **Email:** `borhankustia@gmail.com`
+   - **Email:** `onyxsupport36@gmail.com`
    - **Password:** `Eusuf#`
 5. You can view stats, update statuses (Pending, Dispatched, Delivered, Cancelled), filter by delivery dates, and export spreadsheet-compatible CSVs.
 

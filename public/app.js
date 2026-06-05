@@ -1,17 +1,17 @@
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD1xvrgTpoldBiMkPi4YkRB3f35j7wgkBY",
-  authDomain: "dudhwala-13a69.firebaseapp.com",
-  projectId: "dudhwala-13a69",
-  storageBucket: "dudhwala-13a69.firebasestorage.app",
-  messagingSenderId: "360751875123",
-  appId: "1:360751875123:web:dd56e1cd1f0ad8e01d4f46"
+  apiKey: "AIzaSyCRpexJ6gD9VpbLX_IhLSJ0jMMxohBvrPw",
+  authDomain: "onyxgoods.firebaseapp.com",
+  projectId: "onyxgoods",
+  storageBucket: "onyxgoods.firebasestorage.app",
+  messagingSenderId: "576476626749",
+  appId: "1:576476626749:web:6b8cfd1f2bbd6417cbcf54"
 };
 
 // Global State
 let db = null;
 let isMockMode = false;
-let currentLang = localStorage.getItem("shikor_lang") || "en";
+let currentLang = localStorage.getItem("onyx_goods_lang") || "en";
 let categories = [];
 let products = [];
 let coupons = [];
@@ -20,23 +20,23 @@ let activeUser = null;
 // Translation Dictionaries
 const translations = {
   en: {
-    "page-title": "SHIKOR | Village Roots, Urban Trust",
+    "page-title": "OnyxGoods | Village Roots, Urban Trust",
     "nav-home": "Home",
     "nav-shop": "Shop",
     "nav-story": "Our Story",
     "nav-reviews": "Reviews",
     "nav-cart": "Cart",
     "nav-account": "My Account",
-    "footer-about-title": "About SHIKOR",
-    "footer-about-text": "SHIKOR connects authentic village products directly with urban families, maintaining quality, freshness, and trust. Direct from rural producers.",
+    "footer-about-title": "About OnyxGoods",
+    "footer-about-text": "OnyxGoods connects authentic village products directly with urban families, maintaining quality, freshness, and trust. Direct from rural producers.",
     "footer-links-title": "Quick Links",
     "footer-contact-title": "Contact Us",
     "footer-admin-title": "System Portal",
     "footer-admin-link": "🔑 Admin Dashboard",
-    "footer-copyright": "&copy; 2026 SHIKOR Marketplace. All rights reserved.",
+    "footer-copyright": "&copy; 2026 OnyxGoods Marketplace. All rights reserved.",
     "footer-subtitle": "Village Roots, Urban Trust.",
     "footer-whatsapp": "💬 WhatsApp: +8801302101024",
-    "footer-email": "📧 borhankustia@gmail.com",
+    "footer-email": "📧 onyxsupport36@gmail.com",
     "footer-loc": "📍 Dhaka Office: Mirpur-10",
     "toast-cart-added": "Product added to cart!",
     "toast-cart-updated": "Cart updated!",
@@ -90,10 +90,10 @@ const translations = {
     "footer-contact-title": "যোগাযোগ করুন",
     "footer-admin-title": "সিস্টেম পোর্টাল",
     "footer-admin-link": "🔑 অ্যাডমিন ড্যাশবোর্ড",
-    "footer-copyright": "&copy; ২০২৬ SHIKOR মার্কেটপ্লেস। সর্বস্বত্ব সংরক্ষিত।",
+    "footer-copyright": "&copy; ২০২৬ OnyxGoods মার্কেটপ্লেস। সর্বস্বত্ব সংরক্ষিত।",
     "footer-subtitle": "গ্রামের শেকড়, শহরের আস্থা।",
     "footer-whatsapp": "💬 হোয়াটসঅ্যাপ: ০১৩০২১০১০২৪",
-    "footer-email": "📧 borhankustia@gmail.com",
+    "footer-email": "📧 onyxsupport36@gmail.com",
     "footer-loc": "📍 ঢাকা অফিস: মিরপুর-১০",
     "toast-cart-added": "কার্টে পণ্য যোগ করা হয়েছে!",
     "toast-cart-updated": "কার্ট আপডেট করা হয়েছে!",
@@ -142,7 +142,7 @@ function initializeDatabase() {
   const isDefaultConfig = forceMock || firebaseConfig.projectId.includes("YOUR_PROJECT_ID_HERE") || !firebaseConfig.apiKey;
 
   if (isDefaultConfig) {
-    console.warn("SHIKOR is running in MOCK MODE (localStorage).");
+    console.warn("OnyxGoods is running in MOCK MODE (localStorage).");
     isMockMode = true;
     setupMockDatabase();
   } else {
@@ -160,7 +160,7 @@ function initializeDatabase() {
 
 // Seed Mock LocalStorage DB
 function setupMockDatabase() {
-  if (!localStorage.getItem("shikor_categories")) {
+  if (!localStorage.getItem("onyx_goods_categories")) {
     const defaultCategories = [
       { id: "cat_dairy", nameEn: "Fresh Dairy", nameBn: "তাজা দুগ্ধজাত পণ্য", descriptionEn: "100% pure milk, fresh ghee, and authentic dairy products.", descriptionBn: "১০০% খাঁটি দুধ, তাজা ঘি এবং আসল দুগ্ধজাত খাবার।", imagePath: "images/daily_milk.png", status: "Active", createdAt: new Date().toISOString() },
       { id: "cat_honey", nameEn: "Honey & Natural Products", nameBn: "মধু ও প্রাকৃতিক পণ্য", descriptionEn: "Raw Sundarbans honey, pure mustard oil, and forest goods.", descriptionBn: "সুন্দরবনের খাঁটি মধু, কাঠের ঘানি ভাঙা সরিষার তেল এবং প্রাকৃতিক সামগ্রী।", imagePath: "images/premium_ghee.png", status: "Active", createdAt: new Date().toISOString() },
@@ -171,10 +171,10 @@ function setupMockDatabase() {
       { id: "cat_organic", nameEn: "Organic Products", nameBn: "অর্গানিক পণ্য", descriptionEn: "Strictly chemical-free, verified health foods.", descriptionBn: "সম্পূর্ণ রাসায়নিক ও প্রিজারভেটিভ মুক্ত অর্গানিক খাবার।", imagePath: "images/premium_ghee.png", status: "Active", createdAt: new Date().toISOString() },
       { id: "cat_seasonal", nameEn: "Seasonal Products", nameBn: "মৌসুমী পণ্য", descriptionEn: "Freshly sourced seasonal delights like summer mangoes.", descriptionBn: "মৌসুমী ফলমূল যেমন রাজশাহীর হিমসাগর ও ল্যাংড়া আম।", imagePath: "images/about_farm.png", status: "Active", createdAt: new Date().toISOString() }
     ];
-    localStorage.setItem("shikor_categories", JSON.stringify(defaultCategories));
+    localStorage.setItem("onyx_goods_categories", JSON.stringify(defaultCategories));
   }
 
-  if (!localStorage.getItem("shikor_products")) {
+  if (!localStorage.getItem("onyx_goods_products")) {
     const defaultProducts = [
       { id: "prod_raw_milk", categoryId: "cat_dairy", nameEn: "Daily Raw Cow Milk", nameBn: "দৈনিক কাঁচা গরুর দুধ", descEn: "Pure, raw, single-source cow milk chilled immediately. Rich in nutrients.", descBn: "শতভাগ খাঁটি ও কাঁচা গরুর দুধ যা সংগ্রহের পরই দ্রুত শীতলীকৃত। পুষ্টিগুণে ভরপুর।", benefitsEn: ["Chilled immediately at source", "No preservatives added", "High fat and rich nutrients"], benefitsBn: ["সংগ্রহের পর দ্রুত শীতলীকৃত", "কোনো প্রিজারভেটিভ নেই", "প্রাকৃতিক পুষ্টি ও ঘন মালাই যুক্ত"], price: 80, discountPrice: 75, stock: 45, unitEn: "liter", unitBn: "লিটার", imagePath: "images/daily_milk.png", inStock: true, isFeatured: true, badgeEn: "Best Seller", badgeBn: "সেরা বিক্রীত", createdAt: new Date().toISOString() },
       { id: "prod_ghee", categoryId: "cat_dairy", nameEn: "Premium Village Cow Ghee", nameBn: "প্রিমিয়াম গ্রাম্য গরুর ঘি", descEn: "Slow-cooked pure cow ghee made from cultured butter cream. Signature aroma.", descBn: "ঘোল বা মাখন থেকে ধিমে আঁচে জ্বাল দেওয়া খাঁটি গরুর ঘি। দানাদার গঠন ও সুবাস।", benefitsEn: ["Traditionally slow cooked", "Granular texture", "Pure cultured butter cream"], benefitsBn: ["শতভাগ ঐতিহ্যবাহী উপায়ে তৈরি", "দানাদার এবং খাঁটি সুবাস", "প্রাকৃতিক মাখন থেকে প্রস্তুত"], price: 1200, discountPrice: 1150, stock: 15, unitEn: "kg", unitBn: "কেজি", imagePath: "images/premium_ghee.png", inStock: true, isFeatured: true, badgeEn: "Pure Gold", badgeBn: "খাঁটি সোনালী", createdAt: new Date().toISOString() },
@@ -182,37 +182,37 @@ function setupMockDatabase() {
       { id: "prod_nakshikantha", categoryId: "cat_handmade", nameEn: "Nakshikantha Quilt", nameBn: "নকশিকাঁথা", descEn: "Beautiful hand-stitched traditional Bengali quilt with elaborate artistic patterns, made by local village artisans.", descBn: "গ্রামের দক্ষ কারিগরদের সুনিপুণ হাতের কাজে তৈরি চমৎকার ঐতিহ্যবাহী নকশিকাঁথা।", benefitsEn: ["100% hand-stitched by rural women", "Traditional designs", "High quality cotton fabric"], benefitsBn: ["গ্রামীণ নারীদের হাতের নিখুঁত সেলাই", "ঐতিহ্যবাহী এবং বৈচিত্র্যময় নকশা", "উন্নত মানের সুতি কাপড় ব্যবহার"], price: 2500, discountPrice: 2200, stock: 5, unitEn: "piece", unitBn: "পিস", imagePath: "images/nakshikantha.png", inStock: true, isFeatured: true, badgeEn: "Artisan Craft", badgeBn: "হস্তশিল্প", createdAt: new Date().toISOString() },
       { id: "prod_tiler_khaja", categoryId: "cat_traditional", nameEn: "Kustiar Bikkhato Tiler Khaja", nameBn: "কুষ্টিয়ার বিখ্যাত তিলের খাজা", descEn: "Famous traditional sesame brittle sweet from Kushtia, extremely crispy and sweet.", descBn: "কুষ্টিয়ার ঐতিহ্যবাহী ও বিখ্যাত মচমচে তিলের খাজা। সেরা স্বাদের ও স্বাস্থ্যসম্মত উপায়ে তৈরি।", benefitsEn: ["Traditional recipe since 1900s", "No artificial sweeteners", "Made with pure sesame seeds"], benefitsBn: ["ঐতিহ্যবাহী রেসিপিতে তৈরি", "কোনো কৃত্রিম মিষ্টি নেই", "খাঁটি খোসা ছাড়ানো তিল ব্যবহার"], price: 160, discountPrice: 150, stock: 60, unitEn: "pack", unitBn: "প্যাকেট", imagePath: "images/tiler_khaja.png", inStock: true, isFeatured: true, badgeEn: "Kushtia Special", badgeBn: "কুষ্টিয়ার ঐতিহ্য", createdAt: new Date().toISOString() }
     ];
-    localStorage.setItem("shikor_products", JSON.stringify(defaultProducts));
+    localStorage.setItem("onyx_goods_products", JSON.stringify(defaultProducts));
   }
 
-  if (!localStorage.getItem("shikor_coupons")) {
+  if (!localStorage.getItem("onyx_goods_coupons")) {
     const defaultCoupons = [
-      { code: "SHIKOR10", type: "percentage", value: 10, expiryDate: "2027-12-31", status: "Active" },
+      { code: "OnyxGoods10", type: "percentage", value: 10, expiryDate: "2027-12-31", status: "Active" },
       { code: "WELCOME100", type: "fixed", value: 100, expiryDate: "2027-12-31", status: "Active" },
       { code: "EID2026", type: "percentage", value: 20, expiryDate: "2026-09-30", status: "Active" }
     ];
-    localStorage.setItem("shikor_coupons", JSON.stringify(defaultCoupons));
+    localStorage.setItem("onyx_goods_coupons", JSON.stringify(defaultCoupons));
   }
 
-  if (!localStorage.getItem("shikor_orders")) {
-    localStorage.setItem("shikor_orders", JSON.stringify([]));
+  if (!localStorage.getItem("onyx_goods_orders")) {
+    localStorage.setItem("onyx_goods_orders", JSON.stringify([]));
   }
 
-  if (!localStorage.getItem("shikor_customers")) {
-    localStorage.setItem("shikor_customers", JSON.stringify([]));
+  if (!localStorage.getItem("onyx_goods_customers")) {
+    localStorage.setItem("onyx_goods_customers", JSON.stringify([]));
   }
 
-  if (!localStorage.getItem("shikor_settings")) {
+  if (!localStorage.getItem("onyx_goods_settings")) {
     const defaultSettings = {
-      logoUrl: "logo.png",
-      contactEmail: "borhankustia@gmail.com",
+      logoUrl: "logo.jpg",
+      contactEmail: "onyxsupport36@gmail.com",
       contactPhone: "+8801302101024",
       whatsappNumber: "8801302101024",
       deliveryChargeDhaka: 60,
       deliveryChargeOutside: 120,
       socialLinks: { facebook: "#", instagram: "#" }
     };
-    localStorage.setItem("shikor_settings", JSON.stringify(defaultSettings));
+    localStorage.setItem("onyx_goods_settings", JSON.stringify(defaultSettings));
   }
 }
 
@@ -220,9 +220,9 @@ function setupMockDatabase() {
 async function loadCatalogData() {
   try {
     if (isMockMode) {
-      categories = JSON.parse(localStorage.getItem("shikor_categories") || "[]");
-      products   = JSON.parse(localStorage.getItem("shikor_products")   || "[]");
-      coupons    = JSON.parse(localStorage.getItem("shikor_coupons")    || "[]");
+      categories = JSON.parse(localStorage.getItem("onyx_goods_categories") || "[]");
+      products   = JSON.parse(localStorage.getItem("onyx_goods_products")   || "[]");
+      coupons    = JSON.parse(localStorage.getItem("onyx_goods_coupons")    || "[]");
     } else {
       // Load from Firestore
       const [catSnap, prodSnap, coupSnap] = await Promise.all([
@@ -250,9 +250,9 @@ async function loadCatalogData() {
     console.error("Error loading database catalog:", error);
     // Graceful fallback — use localStorage data so shop isn't completely broken
     isMockMode = true;
-    categories = JSON.parse(localStorage.getItem("shikor_categories") || "[]");
-    products   = JSON.parse(localStorage.getItem("shikor_products")   || "[]");
-    coupons    = JSON.parse(localStorage.getItem("shikor_coupons")    || "[]");
+    categories = JSON.parse(localStorage.getItem("onyx_goods_categories") || "[]");
+    products   = JSON.parse(localStorage.getItem("onyx_goods_products")   || "[]");
+    coupons    = JSON.parse(localStorage.getItem("onyx_goods_coupons")    || "[]");
     if (categories.length === 0) setupMockDatabase();
   }
 }
@@ -301,7 +301,7 @@ async function seedDefaultCatalogToFirestore() {
 
 async function seedDefaultCouponsToFirestore() {
   const defaultCoupons = [
-    { code: "SHIKOR10",   type: "percentage", value: 10,  expiryDate: "2027-12-31", status: "Active" },
+    { code: "OnyxGoods10",   type: "percentage", value: 10,  expiryDate: "2027-12-31", status: "Active" },
     { code: "WELCOME100", type: "fixed",       value: 100, expiryDate: "2027-12-31", status: "Active" },
     { code: "EID2026",    type: "percentage", value: 20,  expiryDate: "2026-09-30", status: "Active" }
   ];
@@ -322,11 +322,11 @@ function saveMockData(key, data) {
 
 // Cart Management Actions
 function getCart() {
-  return JSON.parse(localStorage.getItem("shikor_cart") || "[]");
+  return JSON.parse(localStorage.getItem("onyx_goods_cart") || "[]");
 }
 
 function saveCart(cart) {
-  localStorage.setItem("shikor_cart", JSON.stringify(cart));
+  localStorage.setItem("onyx_goods_cart", JSON.stringify(cart));
   updateCartBadge();
 }
 
@@ -382,7 +382,7 @@ function removeFromCart(productId) {
 }
 
 function clearCart() {
-  localStorage.removeItem("shikor_cart");
+  localStorage.removeItem("onyx_goods_cart");
   updateCartBadge();
 }
 
@@ -400,7 +400,7 @@ function updateCartBadge() {
 // Localization Switcher
 function setLanguage(lang) {
   currentLang = lang;
-  localStorage.setItem("shikor_lang", lang);
+  localStorage.setItem("onyx_goods_lang", lang);
 
   const dict = translations[lang];
 
@@ -504,6 +504,15 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   setLanguage(currentLang);
 
+  // Mobile menu toggle
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  const navLinks = document.querySelector(".nav-links");
+  if (mobileMenuBtn && navLinks) {
+    mobileMenuBtn.addEventListener("click", () => {
+      navLinks.classList.toggle("mobile-active");
+    });
+  }
+
   // Router bindings
   const path = window.location.pathname;
   if (path.includes("shop")) {
@@ -555,7 +564,7 @@ function setupNavbarScroll() {
 
 // User Profile loaders
 function loadLoggedUser() {
-  activeUser = JSON.parse(localStorage.getItem("shikor_logged_user")) || null;
+  activeUser = JSON.parse(localStorage.getItem("onyx_goods_logged_user")) || null;
   const banner = document.getElementById("new-user-banner");
   if (banner && !activeUser) {
     banner.style.display = "block";
@@ -1018,14 +1027,14 @@ function applyCouponCode(code) {
   const match = coupons.find(c => c.code === code && c.status === "Active" && new Date(c.expiryDate) >= new Date());
   if (match) {
     activeCoupon = match;
-    localStorage.setItem("shikor_active_coupon", JSON.stringify(match));
+    localStorage.setItem("onyx_goods_active_coupon", JSON.stringify(match));
     msgEl.innerText = translations[currentLang]["toast-coupon-success"];
     msgEl.className = "coupon-msg success";
     showToast(translations[currentLang]["toast-coupon-success"]);
     renderCartPage();
   } else {
     activeCoupon = null;
-    localStorage.removeItem("shikor_active_coupon");
+    localStorage.removeItem("onyx_goods_active_coupon");
     msgEl.innerText = translations[currentLang]["toast-coupon-invalid"];
     msgEl.className = "coupon-msg error";
     showToast(translations[currentLang]["toast-coupon-invalid"], true);
@@ -1039,7 +1048,7 @@ function renderCartPage() {
   const cartGrid = document.getElementById("cart-page-layout");
 
   // Load active coupon if saved
-  activeCoupon = JSON.parse(localStorage.getItem("shikor_active_coupon")) || null;
+  activeCoupon = JSON.parse(localStorage.getItem("onyx_goods_active_coupon")) || null;
 
   if (cart.length === 0) {
     if (cartGrid) {
@@ -1117,8 +1126,8 @@ function renderCartPage() {
   }
 
   // Set checkout totals in localstorage for checkout page load
-  localStorage.setItem("shikor_subtotal", subtotal);
-  localStorage.setItem("shikor_discount", discount);
+  localStorage.setItem("onyx_goods_subtotal", subtotal);
+  localStorage.setItem("onyx_goods_discount", discount);
 
   // Update Summary DOM
   const subtotalEl = document.getElementById("summary-subtotal");
@@ -1231,8 +1240,8 @@ function renderCheckoutPage() {
   });
 
   // Calculate pricing with shipping
-  const subtotal = parseInt(localStorage.getItem("shikor_subtotal") || "0", 10);
-  const discount = parseInt(localStorage.getItem("shikor_discount") || "0", 10);
+  const subtotal = parseInt(localStorage.getItem("onyx_goods_subtotal") || "0", 10);
+  const discount = parseInt(localStorage.getItem("onyx_goods_discount") || "0", 10);
 
   // Delivery rate check
   const district = document.getElementById("checkout-district")?.value || "Dhaka";
@@ -1252,15 +1261,15 @@ async function submitBillingOrder() {
 
   const district = document.getElementById("checkout-district").value;
   const shippingCharge = (district === "Dhaka") ? 60 : 120;
-  const subtotal = parseInt(localStorage.getItem("shikor_subtotal") || "0", 10);
-  const discount = parseInt(localStorage.getItem("shikor_discount") || "0", 10);
+  const subtotal = parseInt(localStorage.getItem("onyx_goods_subtotal") || "0", 10);
+  const discount = parseInt(localStorage.getItem("onyx_goods_discount") || "0", 10);
   const total = subtotal - discount + shippingCharge;
-  const coupon = JSON.parse(localStorage.getItem("shikor_active_coupon")) || null;
+  const coupon = JSON.parse(localStorage.getItem("onyx_goods_active_coupon")) || null;
 
   const cartItems = getCart();
   const orderData = {
     id: "SHK_" + Math.random().toString(36).substr(2, 9).toUpperCase(),
-    customerEmail: document.getElementById("checkout-email")?.value.trim() || "guest@shikor.com",
+    customerEmail: document.getElementById("checkout-email")?.value.trim() || "guest@onyxgoods.com",
     name: document.getElementById("checkout-name").value.trim(),
     phone: document.getElementById("checkout-phone").value.trim(),
     whatsapp: document.getElementById("checkout-whatsapp").value.trim(),
@@ -1284,12 +1293,12 @@ async function submitBillingOrder() {
   try {
     if (isMockMode) {
       // Save order
-      const ordersList = JSON.parse(localStorage.getItem("shikor_orders") || "[]");
+      const ordersList = JSON.parse(localStorage.getItem("onyx_goods_orders") || "[]");
       ordersList.push(orderData);
-      saveMockData("shikor_orders", ordersList);
+      saveMockData("onyx_goods_orders", ordersList);
 
       // Save customer details
-      const custsList = JSON.parse(localStorage.getItem("shikor_customers") || "[]");
+      const custsList = JSON.parse(localStorage.getItem("onyx_goods_customers") || "[]");
       const existIdx = custsList.findIndex(c => c.phone === orderData.phone);
       const profile = {
         name: orderData.name,
@@ -1305,7 +1314,7 @@ async function submitBillingOrder() {
       } else {
         custsList.push(profile);
       }
-      saveMockData("shikor_customers", custsList);
+      saveMockData("onyx_goods_customers", custsList);
     } else {
       await db.collection("orders").doc(orderData.id).set(orderData);
       
@@ -1325,9 +1334,9 @@ async function submitBillingOrder() {
     
     // Clear out cart state
     clearCart();
-    localStorage.removeItem("shikor_active_coupon");
-    localStorage.removeItem("shikor_subtotal");
-    localStorage.removeItem("shikor_discount");
+    localStorage.removeItem("onyx_goods_active_coupon");
+    localStorage.removeItem("onyx_goods_subtotal");
+    localStorage.removeItem("onyx_goods_discount");
 
     // Open WhatsApp prefilled message window
     setTimeout(() => {
@@ -1346,7 +1355,7 @@ function sendWhatsAppInvoice(order) {
   const num = "8801302101024";
   const displayTotal = translateNumber(order.total.toString());
   
-  let msg = `Hello SHIKOR! 🌿
+  let msg = `Hello OnyxGoods! 🌿
 I just placed a new order on your premium marketplace:
 ━━━━━━━━━━━━━━━━━━━━
 *Order ID*: ${order.id}
@@ -1428,17 +1437,17 @@ function handleCustomerAuth(mode) {
     const newUser = { name, email, phone, address, district, password };
 
     // Register user in Mock local storage
-    const users = JSON.parse(localStorage.getItem("shikor_users") || "[]");
+    const users = JSON.parse(localStorage.getItem("onyx_goods_users") || "[]");
     if (users.find(u => u.email === email)) {
       showToast("Email address already registered.", true);
       if (btn) btn.disabled = false;
       return;
     }
     users.push(newUser);
-    saveMockData("shikor_users", users);
+    saveMockData("onyx_goods_users", users);
 
     // Save as active logged in
-    localStorage.setItem("shikor_logged_user", JSON.stringify(newUser));
+    localStorage.setItem("onyx_goods_logged_user", JSON.stringify(newUser));
     showToast(translations[currentLang]["toast-register-success"]);
     setTimeout(() => {
       window.location.reload();
@@ -1446,22 +1455,11 @@ function handleCustomerAuth(mode) {
 
   } else {
     // Login check
-    const users = JSON.parse(localStorage.getItem("shikor_users") || "[]");
+    const users = JSON.parse(localStorage.getItem("onyx_goods_users") || "[]");
     const match = users.find(u => u.email === email && u.password === password);
     
-    // Add default test credentials so user doesn't get blocked
-    if (!match && email === "user@shikor.com" && password === "user123") {
-      const defaultUser = { name: "Adnan Chowdhury", email: "user@shikor.com", phone: "01711223344", address: "Sector 3, Uttara", district: "Dhaka" };
-      localStorage.setItem("shikor_logged_user", JSON.stringify(defaultUser));
-      showToast(translations[currentLang]["toast-login-success"]);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-      return;
-    }
-
     if (match) {
-      localStorage.setItem("shikor_logged_user", JSON.stringify(match));
+      localStorage.setItem("onyx_goods_logged_user", JSON.stringify(match));
       showToast(translations[currentLang]["toast-login-success"]);
       setTimeout(() => {
         window.location.reload();
@@ -1474,7 +1472,7 @@ function handleCustomerAuth(mode) {
 }
 
 window.logoutCustomer = function() {
-  localStorage.removeItem("shikor_logged_user");
+  localStorage.removeItem("onyx_goods_logged_user");
   window.location.reload();
 };
 
@@ -1507,7 +1505,7 @@ async function loadUserOrders() {
   let userOrders = [];
   try {
     if (isMockMode) {
-      const allOrders = JSON.parse(localStorage.getItem("shikor_orders") || "[]");
+      const allOrders = JSON.parse(localStorage.getItem("onyx_goods_orders") || "[]");
       userOrders = allOrders.filter(o => o.customerEmail === activeUser.email);
     } else {
       const snap = await db.collection("orders").where("customerEmail", "==", activeUser.email).get();

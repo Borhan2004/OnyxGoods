@@ -1,16 +1,16 @@
 // ════════════════════════════════════════
-// SHIKOR ADMIN PORTAL v3.0
+// OnyxGoods ADMIN PORTAL v3.0
 // Pro Marketplace Dashboard with Image Upload
 // ════════════════════════════════════════
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD1xvrgTpoldBiMkPi4YkRB3f35j7wgkBY",
-  authDomain: "dudhwala-13a69.firebaseapp.com",
-  projectId: "dudhwala-13a69",
-  storageBucket: "dudhwala-13a69.firebasestorage.app",
-  messagingSenderId: "360751875123",
-  appId: "1:360751875123:web:dd56e1cd1f0ad8e01d4f46"
+  apiKey: "AIzaSyCRpexJ6gD9VpbLX_IhLSJ0jMMxohBvrPw",
+  authDomain: "onyxgoods.firebaseapp.com",
+  projectId: "onyxgoods",
+  storageBucket: "onyxgoods.firebasestorage.app",
+  messagingSenderId: "576476626749",
+  appId: "1:576476626749:web:6b8cfd1f2bbd6417cbcf54"
 };
 
 // Global State
@@ -77,8 +77,8 @@ function updateModeBadge() {
 }
 
 function setupMockSession() {
-  const logged = sessionStorage.getItem("shikor_admin_logged") === "true";
-  if (logged) showDashboard("borhankustia@gmail.com");
+  const logged = sessionStorage.getItem("onyx_goods_admin_logged") === "true";
+  if (logged) showDashboard("onyxsupport36@gmail.com");
   else showLoginScreen();
 }
 
@@ -123,13 +123,9 @@ async function handleAdminLogin(event) {
 
   try {
     if (isMockMode) {
-      if (email === "borhankustia@gmail.com" && password === "Eusuf#") {
-        sessionStorage.setItem("shikor_admin_logged", "true");
-        showDashboard(email);
-        showToast("Logged in (Mock Mode) ✅");
-      } else {
-        throw new Error("Invalid credentials. Use: borhankustia@gmail.com / Eusuf#");
-      }
+      sessionStorage.setItem("onyx_goods_admin_logged", "true");
+      showDashboard(email);
+      showToast("Logged in (Mock Mode) ✅");
     } else {
       await firebase.auth().signInWithEmailAndPassword(email, password);
       showToast("Access granted! Welcome back 🎉");
@@ -144,7 +140,7 @@ async function handleAdminLogin(event) {
 
 async function handleAdminLogout() {
   if (isMockMode) {
-    sessionStorage.removeItem("shikor_admin_logged");
+    sessionStorage.removeItem("onyx_goods_admin_logged");
     showLoginScreen();
     showToast("Signed out.");
   } else {
@@ -161,12 +157,12 @@ async function handleAdminLogout() {
 async function loadPortalData() {
   try {
     if (isMockMode) {
-      categories = JSON.parse(localStorage.getItem("shikor_categories") || "[]");
-      products   = JSON.parse(localStorage.getItem("shikor_products")   || "[]");
-      orders     = JSON.parse(localStorage.getItem("shikor_orders")     || "[]");
-      customers  = JSON.parse(localStorage.getItem("shikor_customers")  || "[]");
-      coupons    = JSON.parse(localStorage.getItem("shikor_coupons")    || "[]");
-      settings   = JSON.parse(localStorage.getItem("shikor_settings")  || "{}");
+      categories = JSON.parse(localStorage.getItem("onyx_goods_categories") || "[]");
+      products   = JSON.parse(localStorage.getItem("onyx_goods_products")   || "[]");
+      orders     = JSON.parse(localStorage.getItem("onyx_goods_orders")     || "[]");
+      customers  = JSON.parse(localStorage.getItem("onyx_goods_customers")  || "[]");
+      coupons    = JSON.parse(localStorage.getItem("onyx_goods_coupons")    || "[]");
+      settings   = JSON.parse(localStorage.getItem("onyx_goods_settings")  || "{}");
     } else {
       const [catSnap, prodSnap, ordSnap, custSnap, coupSnap, setDoc] = await Promise.all([
         db.collection("categories").get(),
@@ -528,7 +524,7 @@ async function handleSaveCategory(event) {
       const idx = categories.findIndex(c => c.id === catId);
       if (idx > -1) categories[idx] = data;
       else categories.push(data);
-      saveMockState("shikor_categories", categories);
+      saveMockState("onyx_goods_categories", categories);
     } else {
       await db.collection("categories").doc(catId).set(data);
     }
@@ -581,7 +577,7 @@ async function deleteCategory(id) {
   try {
     if (isMockMode) {
       categories = categories.filter(c => c.id !== id);
-      saveMockState("shikor_categories", categories);
+      saveMockState("onyx_goods_categories", categories);
     } else {
       await db.collection("categories").doc(id).delete();
     }
@@ -776,7 +772,7 @@ async function handleSaveProduct(event) {
       const idx = products.findIndex(p => p.id === pid);
       if (idx > -1) products[idx] = data;
       else products.push(data);
-      saveMockState("shikor_products", products);
+      saveMockState("onyx_goods_products", products);
     } else {
       await db.collection("products").doc(pid).set(data);
     }
@@ -798,7 +794,7 @@ window.toggleProductStockState = async function(id) {
   p.inStock = !p.inStock;
   try {
     if (isMockMode) {
-      saveMockState("shikor_products", products);
+      saveMockState("onyx_goods_products", products);
     } else {
       await db.collection("products").doc(id).update({ inStock: p.inStock });
     }
@@ -814,7 +810,7 @@ async function deleteProduct(id) {
   try {
     if (isMockMode) {
       products = products.filter(p => p.id !== id);
-      saveMockState("shikor_products", products);
+      saveMockState("onyx_goods_products", products);
     } else {
       await db.collection("products").doc(id).delete();
     }
@@ -895,7 +891,7 @@ window.updateOrderStatus = async function(orderId, nextStatus) {
       if (idx > -1) {
         orders[idx].status = nextStatus;
         if (nextStatus === "Delivered") orders[idx].paymentStatus = "Paid";
-        saveMockState("shikor_orders", orders);
+        saveMockState("onyx_goods_orders", orders);
       }
     } else {
       const payload = { status: nextStatus };
@@ -917,7 +913,7 @@ window.exportOrdersToCSV = function() {
   const uri = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
   const link = document.createElement("a");
   link.setAttribute("href", uri);
-  link.setAttribute("download", `shikor_orders_${new Date().toISOString().split("T")[0]}.csv`);
+  link.setAttribute("download", `onyx_goods_orders_${new Date().toISOString().split("T")[0]}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -1008,7 +1004,7 @@ window.updateStockLevels = async function(id, val) {
       if (idx > -1) {
         products[idx].stock = stock;
         products[idx].inStock = stock > 0;
-        saveMockState("shikor_products", products);
+        saveMockState("onyx_goods_products", products);
       }
     } else {
       await db.collection("products").doc(id).update({ stock, inStock: stock > 0 });
@@ -1056,7 +1052,7 @@ async function handleSaveCoupon(event) {
       const idx = coupons.findIndex(c => c.code === code);
       if (idx > -1) coupons[idx] = data;
       else coupons.push(data);
-      saveMockState("shikor_coupons", coupons);
+      saveMockState("onyx_goods_coupons", coupons);
     } else {
       await db.collection("coupons").doc(code).set(data);
     }
@@ -1071,7 +1067,7 @@ window.deleteCoupon = async function(code) {
   try {
     if (isMockMode) {
       coupons = coupons.filter(c => c.code !== code);
-      saveMockState("shikor_coupons", coupons);
+      saveMockState("onyx_goods_coupons", coupons);
     } else {
       await db.collection("coupons").doc(code).delete();
     }
@@ -1137,7 +1133,7 @@ function renderReports() {
 function renderSettings() {
   const fields = ["setLogoUrl","setContactEmail","setContactPhone","setWhatsappNumber","setDeliveryChargeDhaka","setDeliveryChargeOutside"];
   const keys   = ["logoUrl","contactEmail","contactPhone","whatsappNumber","deliveryChargeDhaka","deliveryChargeOutside"];
-  const defaults= ["logo.png","borhankustia@gmail.com","+8801302101024","8801302101024",60,120];
+  const defaults= ["logo.jpg","onyxsupport36@gmail.com","+8801302101024","8801302101024",60,120];
   fields.forEach((id, i) => {
     const el = document.getElementById(id);
     if (el) el.value = settings[keys[i]] !== undefined ? settings[keys[i]] : defaults[i];
@@ -1160,9 +1156,9 @@ async function handleSaveSettings(event) {
     };
     if (isMockMode) {
       settings = data;
-      saveMockState("shikor_settings", settings);
-      localStorage.setItem("shikor_shipping_dhaka", data.deliveryChargeDhaka);
-      localStorage.setItem("shikor_shipping_outside", data.deliveryChargeOutside);
+      saveMockState("onyx_goods_settings", settings);
+      localStorage.setItem("onyx_goods_shipping_dhaka", data.deliveryChargeDhaka);
+      localStorage.setItem("onyx_goods_shipping_outside", data.deliveryChargeOutside);
     } else {
       await db.collection("settings").doc("store_settings").set(data);
     }

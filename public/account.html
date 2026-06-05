@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Manage your customer profile, view orders history, and update saved addresses on SHIKOR.">
-  <title id="page-title">My Account | SHIKOR</title>
-  <link rel="icon" type="image/png" href="logo.png">
+  <meta name="description" content="Manage your customer profile, view orders history, and update saved addresses on OnyxGoods.">
+  <title id="page-title">My Account | OnyxGoods</title>
+  <link rel="icon" type="image/png" href="logo.jpg">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,14 +13,8 @@
   <!-- ── NAV ── -->
   <nav id="navbar">
     <a href="index.html" class="nav-logo">
-      <svg class="nav-logo-img" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="height: 38px; width: 38px; vertical-align: middle; margin-right: 8px;">
-        <circle cx="50" cy="50" r="45" stroke="var(--green)" stroke-width="6" fill="var(--warm-white)" />
-        <path d="M50 80C50 65 40 55 35 45M50 80C50 65 60 55 65 45M50 80V40" stroke="var(--brown)" stroke-width="5" stroke-linecap="round" />
-        <path d="M50 40C45 30 35 25 35 25C35 25 45 30 50 40Z" fill="var(--green)" />
-        <path d="M50 40C55 30 65 25 65 25C65 25 55 30 50 40Z" fill="var(--green)" />
-        <circle cx="50" cy="40" r="3" fill="var(--gold)" />
-      </svg>
-      SHIKOR<span>.</span>
+      <img src="logo.jpg" class="nav-logo-img" alt="Logo" style="height: 38px; width: 38px; vertical-align: middle; margin-right: 8px; border-radius: 50%; object-fit: cover;">
+      OnyxGoods<span>.</span>
     </a>
     <ul class="nav-links">
       <li><a href="index.html" id="nav-home">Home</a></li>
@@ -29,6 +23,7 @@
       <li><a href="index.html#reviews" id="nav-reviews">Reviews</a></li>
     </ul>
     <div class="nav-actions">
+      <button id="mobile-menu-btn" class="mobile-menu-btn" style="display:none; background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--dark-brown);">☰</button>
       <button id="lang-switch" class="lang-btn">বাংলা</button>
       <a href="account.html" class="profile-btn active" title="My Account" id="nav-account-btn">👤</a>
       <a href="cart.html" class="cart-badge-container" id="nav-cart-btn">
@@ -43,12 +38,12 @@
     <!-- Sign In Card -->
     <div class="auth-page-card" id="signin-card">
       <h3 style="font-family:'Playfair Display',serif; color:var(--dark-brown); font-size:1.6rem; margin-bottom:10px;">Sign In</h3>
-      <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:20px;">Welcome back to SHIKOR. Sign in to track your orders.</p>
+      <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:20px;">Welcome back to OnyxGoods. Sign in to track your orders.</p>
       
       <form id="cust-login-form">
         <div class="form-group" style="margin-bottom:12px;">
           <label for="login-email" style="font-size:0.82rem; font-weight:700;">Email Address</label>
-          <input type="email" id="login-email" placeholder="e.g. user@shikor.com" required style="width: 100%; padding: 10px 12px; border: 1px solid #E8D9C8; border-radius: 8px; outline: none; margin-top:4px;">
+          <input type="email" id="login-email" placeholder="e.g. user@onyxgoods.com" required style="width: 100%; padding: 10px 12px; border: 1px solid #E8D9C8; border-radius: 8px; outline: none; margin-top:4px;">
         </div>
         <div class="form-group" style="margin-bottom:16px;">
           <label for="login-password" style="font-size:0.82rem; font-weight:700;">Password</label>
@@ -57,14 +52,8 @@
         <button type="submit" class="btn-primary" id="btn-cust-login" style="width:100%; justify-content:center; margin:0;">Login</button>
       </form>
       
-      <!-- Guest test values info -->
-      <div style="margin-top:16px; padding:10px; background:var(--cream); border-radius:6px; font-size:0.8rem; border:1px solid #E8D9C8;">
-        <strong>Demo Test Login:</strong><br>
-        Email: <code>user@shikor.com</code> / Password: <code>user123</code>
-      </div>
-
       <div class="auth-toggle-tip">
-        New to SHIKOR? <a href="#" onclick="event.preventDefault(); document.getElementById('signin-card').style.display='none'; document.getElementById('signup-card').style.display='block';">Register Account</a>
+        New to OnyxGoods? <a href="#" onclick="event.preventDefault(); document.getElementById('signin-card').style.display='none'; document.getElementById('signup-card').style.display='block';">Register Account</a>
       </div>
     </div>
 
@@ -124,7 +113,7 @@
       <div class="account-user-card">
         <div class="account-avatar-circle">👤</div>
         <div class="account-user-name" id="user-display-name">Adnan Chowdhury</div>
-        <div class="account-user-email" id="user-display-email">user@shikor.com</div>
+        <div class="account-user-email" id="user-display-email">user@onyxgoods.com</div>
       </div>
       <ul class="account-menu">
         <li class="account-menu-item">
@@ -189,16 +178,10 @@
     <div class="footer-top">
       <div class="footer-brand">
         <a href="index.html" class="nav-logo">
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="height: 38px; width: 38px; vertical-align: middle; margin-right: 8px;">
-            <circle cx="50" cy="50" r="45" stroke="var(--green)" stroke-width="6" fill="var(--warm-white)" />
-            <path d="M50 80C50 65 40 55 35 45M50 80C50 65 60 55 65 45M50 80V40" stroke="var(--brown)" stroke-width="5" stroke-linecap="round" />
-            <path d="M50 40C45 30 35 25 35 25C35 25 45 30 50 40Z" fill="var(--green)" />
-            <path d="M50 40C55 30 65 25 65 25C65 25 55 30 50 40Z" fill="var(--green)" />
-            <circle cx="50" cy="40" r="3" fill="var(--gold)" />
-          </svg>
-          SHIKOR<span>.</span>
+          <img src="logo.jpg" class="nav-logo-img" alt="Logo" style="height: 38px; width: 38px; vertical-align: middle; margin-right: 8px; border-radius: 50%; object-fit: cover;">
+          OnyxGoods<span>.</span>
         </a>
-        <p id="footer-about-text">SHIKOR connects authentic village products directly with urban consumers, empowering rural Bangladeshi families and artisans.</p>
+        <p id="footer-about-text">OnyxGoods connects authentic village products directly with urban consumers, empowering rural Bangladeshi families and artisans.</p>
       </div>
       <div>
         <h5 id="footer-links-title">Quick Links</h5>
@@ -213,7 +196,7 @@
         <h5 id="footer-contact-title">Contact Us</h5>
         <ul>
           <li><a href="https://wa.me/8801302101024" id="footer-whatsapp">💬 WhatsApp: +8801302101024</a></li>
-          <li><a href="mailto:borhankustia@gmail.com" id="footer-email">📧 borhankustia@gmail.com</a></li>
+          <li><a href="mailto:onyxsupport36@gmail.com" id="footer-email">📧 onyxsupport36@gmail.com</a></li>
           <li><a href="#" id="footer-loc">📍 Dhaka Office: Mirpur-10</a></li>
         </ul>
       </div>
@@ -225,7 +208,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p id="footer-copyright">&copy; 2026 SHIKOR Marketplace. All rights reserved.</p>
+      <p id="footer-copyright">&copy; 2026 OnyxGoods Marketplace. All rights reserved.</p>
       <p id="footer-subtitle">Village Roots, Urban Trust.</p>
     </div>
   </footer>
@@ -243,7 +226,7 @@
 
 
   <!-- ── FLOATING WHATSAPP ── -->
-  <a href="https://wa.me/8801302101024?text=Hello+SHIKOR!" class="floating-whatsapp" target="_blank" rel="noopener" title="Chat on WhatsApp">
+  <a href="https://wa.me/8801302101024?text=Hello+OnyxGoods!" class="floating-whatsapp" target="_blank" rel="noopener" title="Chat on WhatsApp">
     <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.822.736 5.469 2.025 7.773L0 32l8.468-2.004A15.927 15.927 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm8.121 22.121c-.336.947-1.945 1.808-2.706 1.921-.693.104-1.567.147-2.528-.159-.582-.189-1.33-.44-2.283-.862-4.016-1.742-6.636-5.822-6.836-6.093-.196-.27-1.6-2.129-1.6-4.063 0-1.934 1.013-2.887 1.373-3.279.359-.392.782-.49 1.043-.49.261 0 .521.003.749.013.24.011.562-.091.88.672.336.799 1.143 2.775 1.242 2.978.1.203.163.44.033.712-.13.27-.196.44-.392.675-.196.236-.412.528-.588.708-.196.2-.4.415-.173.815.228.4.012 2.436 2.073 3.329 1.432.624 2.574.815 3.008.908.434.094 1.013-.106 1.383-.514.37-.408.947-1.111 1.205-1.518.26-.407.52-.34.879-.204.359.136 2.277 1.073 2.667 1.268.39.196.651.293.748.457.097.163.097.946-.24 1.893z"/></svg>
   </a>
 

@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>SHIKOR | Admin Dashboard</title>
-  <link rel="icon" type="image/png" href="logo.png">
+  <title>OnyxGoods | Admin Dashboard</title>
+  <link rel="icon" type="image/png" href="logo.jpg">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="admin-body">
@@ -14,19 +14,15 @@
   <div id="authOverlay" class="auth-overlay">
     <div class="auth-card" style="max-width:420px;">
       <div style="text-align:center; margin-bottom:24px;">
-        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:52px;width:52px;margin:0 auto 10px;">
-          <circle cx="50" cy="50" r="45" stroke="var(--green)" stroke-width="6" fill="var(--warm-white)" />
-          <path d="M50 80C50 65 40 55 35 45M50 80C50 65 60 55 65 45M50 80V40" stroke="var(--brown)" stroke-width="5" stroke-linecap="round" />
-          <circle cx="50" cy="40" r="3" fill="var(--gold)" />
-        </svg>
-        <h3 style="font-family:'Playfair Display',serif; color:var(--dark-brown); font-size:1.8rem; margin-bottom:4px;">SHIKOR Admin</h3>
+        <img src="logo.jpg" class="nav-logo-img" alt="Logo" style="height: 38px; width: 38px; vertical-align: middle; margin-right: 8px; border-radius: 50%; object-fit: cover;">
+        <h3 style="font-family:'Playfair Display',serif; color:var(--dark-brown); font-size:1.8rem; margin-bottom:4px;">OnyxGoods Admin</h3>
         <p id="authSubtitle" style="color:var(--text-muted); font-size:0.88rem; font-family:'Outfit',sans-serif;">Sign in to access the control portal</p>
       </div>
       
       <form id="loginForm" onsubmit="handleAdminLogin(event)">
         <div class="admin-field">
           <label for="adminEmail">Email Address</label>
-          <input type="email" id="adminEmail" placeholder="borhankustia@gmail.com" required>
+          <input type="email" id="adminEmail" placeholder="onyxsupport36@gmail.com" required>
         </div>
         <div class="admin-field" style="margin-bottom:20px;">
           <label for="adminPassword">Password</label>
@@ -35,10 +31,6 @@
         <button type="submit" class="submit-btn" id="btn-login-submit" style="width:100%; padding:14px; font-size:1rem;">Sign In to Dashboard</button>
       </form>
       
-      <div style="margin-top:16px; padding:12px 14px; background:var(--cream); border-radius:8px; font-size:0.8rem; border:1px solid #E8D9C8; font-family:'Outfit',sans-serif;">
-        <strong style="color:var(--green);">🔒 Demo Credentials (Mock Mode):</strong><br>
-        Email: <code>borhankustia@gmail.com</code> &nbsp;/&nbsp; Password: <code>Eusuf#</code>
-      </div>
     </div>
   </div>
 
@@ -50,7 +42,7 @@
 
     <!-- Mobile Top Bar -->
     <div class="admin-mobile-topbar">
-      <div class="admin-mobile-logo">SHI<span>KOR</span></div>
+      <div class="admin-mobile-logo">ONYX<span> ADMIN</span></div>
       <div style="display:flex; align-items:center; gap:10px;">
         <span id="adminModeBadge" style="font-family:'Outfit',sans-serif; font-size:0.72rem; padding:4px 10px; background:var(--green); color:#fff; border-radius:20px;"></span>
         <button class="admin-hamburger" onclick="toggleMobileSidebar()" id="hamburgerBtn">☰</button>
@@ -62,12 +54,8 @@
       <!-- Sidebar Navigation Panel -->
       <aside class="admin-sidebar" id="adminSidebar">
         <div class="admin-sidebar-logo">
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="height: 32px; width: 32px; vertical-align: middle;">
-            <circle cx="50" cy="50" r="45" stroke="var(--gold)" stroke-width="6" fill="var(--green)" />
-            <path d="M50 80C50 65 40 55 35 45M50 80C50 65 60 55 65 45M50 80V40" stroke="var(--cream)" stroke-width="5" stroke-linecap="round" />
-            <circle cx="50" cy="40" r="3" fill="var(--gold)" />
-          </svg>
-          SHI<span>KOR Portal</span>
+          <img src="logo.jpg" class="nav-logo-img" alt="Logo" style="height: 38px; width: 38px; vertical-align: middle; margin-right: 8px; border-radius: 50%; object-fit: cover;">
+          ONYX<span> ADMIN</span>
         </div>
         
         <!-- Mode indicator -->
@@ -87,7 +75,7 @@
         </ul>
 
         <div class="admin-sidebar-user">
-          <span id="adminUserEmail" style="font-weight: 500; font-size:0.82rem;">borhankustia@gmail.com</span>
+          <span id="adminUserEmail" style="font-weight: 500; font-size:0.82rem;">onyxsupport36@gmail.com</span>
           <a href="index.html" style="color:var(--gold); text-decoration:none; font-family:'Outfit',sans-serif; font-size:0.8rem;">🏠 Visit Store →</a>
           <button onclick="handleAdminLogout()" class="admin-logout" id="btn-logout" style="width:100%; border-color:rgba(255,255,255,0.25);">Sign Out</button>
         </div>
