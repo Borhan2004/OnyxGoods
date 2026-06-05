@@ -35,5 +35,47 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
+
+    // Products: public can read, only admin can write
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Categories: public can read, only admin can write
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Suppliers: public can create/sign up, admin can read/write/approve
+    match /suppliers/{supplierId} {
+      allow create: if true;
+      allow read, write: if isAdmin();
+    }
+
+    // Testimonials: public can read, admin can write
+    match /testimonials/{testimonialId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Banners: public can read, admin can write
+    match /banners/{bannerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Settings: public can read, admin can write
+    match /settings/{settingsId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Coupons: public can read, only admin can write
+    match /coupons/{couponCode} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
   }
 }
