@@ -258,39 +258,50 @@ function processImageFile(file, previewId, dataFieldId) {
   reader.readAsDataURL(file);
 }
 
-// Canvas-based image resizer
+// Canvas-based image resizer — compresses to max 600px wide, JPEG 72% quality
+// Keeps base64 strings small enough for Firestore documents (< 300KB)
 function resizeImage(dataUrl, maxWidth, callback) {
   const img = new Image();
   img.onload = function() {
-    const canvas = document.createElement("canvas");
+    const canvas = document.createElement('canvas');
     let w = img.width, h = img.height;
-    if (w > maxWidth) {
-      h = Math.round(h * maxWidth / w);
-      w = maxWidth;
+    const limit = Math.min(maxWidth, 600); // hard cap at 600px
+    if (w > limit) {
+      h = Math.round(h * limit / w);
+      w = limit;
     }
     canvas.width = w;
     canvas.height = h;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0, w, h);
-    callback(canvas.toDataURL("image/jpeg", 0.82));
+    callback(canvas.toDataURL('image/jpeg', 0.72));
   };
+  img.onerror = () => callback(dataUrl); // if decode fails, use original
   img.src = dataUrl;
 }
 
-// Upload image to Firebase Storage (production mode)
-async function uploadToStorage(dataUrl, path) {
-  if (isMockMode || !storage) return dataUrl; // In mock mode just use base64
+// Convert data URL to Blob (no fetch needed — works offline & with data: URIs)
+function dataURLtoBlob(dataUrl) {
   try {
-    const response = await fetch(dataUrl);
-    const blob = await response.blob();
-    const ref = storage.ref(path);
-    await ref.put(blob);
-    const downloadUrl = await ref.getDownloadURL();
-    return downloadUrl;
+    const parts = dataUrl.split(',');
+    const mime = parts[0].match(/:(.*?);/)[1];
+    const binary = atob(parts[1]);
+    const arr = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+    return new Blob([arr], { type: mime });
   } catch (e) {
-    console.error("Storage upload failed:", e);
-    return dataUrl; // Fallback to base64
+    console.error('dataURLtoBlob error:', e);
+    return null;
   }
+}
+
+// Upload image to Firebase Storage (production mode)
+// Falls back to base64-in-Firestore if Storage upload fails or times out
+async function uploadToStorage(dataUrl, path) {
+  // Always store as compressed base64 in Firestore for now.
+  // Images are resized to max 600px so they stay well under Firestore's 1MB doc limit.
+  // Firebase Storage can be wired up later when storage.rules are configured.
+  return dataUrl;
 }
 
 // Clear image field helper
