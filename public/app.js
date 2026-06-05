@@ -503,7 +503,7 @@ function renderHomepageCatalog() {
       const desc = currentLang === "en" ? cat.descriptionEn : cat.descriptionBn;
       
       catCard.innerHTML = `
-        <div class="category-icon"><img src="${cat.imagePath}" alt="${name}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--green);"></div>
+        <div class="category-icon"><img src="${cat.imagePath || cat.imageData || 'images/daily_milk.png'}" alt="${name}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--green);" onerror="this.src='images/daily_milk.png'"></div>
         <div class="category-name">${name}</div>
         <div class="category-desc">${desc}</div>
       `;
@@ -536,7 +536,7 @@ function renderHomepageCatalog() {
       
       card.innerHTML = `
         <div class="product-img-wrap">
-          <img src="${prod.imagePath}" alt="${name}" class="product-img-pic" onerror="this.src='images/daily_milk.png'">
+          <img src="${prod.imagePath || prod.imageData || 'images/daily_milk.png'}" alt="${name}" class="product-img-pic" onerror="this.src='images/daily_milk.png'">
           ${badgeHtml}
         </div>
         <div class="product-body">
@@ -724,7 +724,7 @@ function renderShopPage() {
 
       card.innerHTML = `
         <div class="product-img-wrap">
-          <img src="${prod.imagePath}" alt="${name}" class="product-img-pic" onerror="this.src='images/daily_milk.png'">
+          <img src="${prod.imagePath || prod.imageData || 'images/daily_milk.png'}" alt="${name}" class="product-img-pic" onerror="this.src='images/daily_milk.png'">
           ${badgeHtml}
         </div>
         <div class="product-body">
@@ -815,7 +815,8 @@ function renderProductDetailsPage() {
   // Render images
   const mainImg = document.getElementById("details-main-img");
   if (mainImg) {
-    mainImg.src = prod.imagePath;
+    mainImg.src = prod.imagePath || prod.imageData || 'images/daily_milk.png';
+    mainImg.onerror = () => { mainImg.src = 'images/daily_milk.png'; };
     mainImg.alt = name;
   }
 

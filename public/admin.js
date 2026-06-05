@@ -1135,19 +1135,18 @@ function renderSettings() {
 
 async function handleSaveSettings(event) {
   event.preventDefault();
-  const btn = event.submitter;
-  btn.disabled = true;
-  btn.innerHTML = `<span class="upload-spinner"></span> Saving...`;
-  const data = {
-    logoUrl:               document.getElementById("setLogoUrl").value.trim(),
-    contactEmail:          document.getElementById("setContactEmail").value.trim(),
-    contactPhone:          document.getElementById("setContactPhone").value.trim(),
-    whatsappNumber:        document.getElementById("setWhatsappNumber").value.trim(),
-    deliveryChargeDhaka:   parseInt(document.getElementById("setDeliveryChargeDhaka").value, 10),
-    deliveryChargeOutside: parseInt(document.getElementById("setDeliveryChargeOutside").value, 10),
-    socialLinks: settings.socialLinks || { facebook: "#", instagram: "#" }
-  };
+  const btn = document.getElementById("btn-save-settings");
+  if (btn) { btn.disabled = true; btn.innerHTML = `<span class="upload-spinner"></span> Saving...`; }
   try {
+    const data = {
+      logoUrl:               document.getElementById("setLogoUrl").value.trim(),
+      contactEmail:          document.getElementById("setContactEmail").value.trim(),
+      contactPhone:          document.getElementById("setContactPhone").value.trim(),
+      whatsappNumber:        document.getElementById("setWhatsappNumber").value.trim(),
+      deliveryChargeDhaka:   parseInt(document.getElementById("setDeliveryChargeDhaka").value, 10),
+      deliveryChargeOutside: parseInt(document.getElementById("setDeliveryChargeOutside").value, 10),
+      socialLinks: settings.socialLinks || { facebook: "#", instagram: "#" }
+    };
     if (isMockMode) {
       settings = data;
       saveMockState("shikor_settings", settings);
@@ -1157,11 +1156,11 @@ async function handleSaveSettings(event) {
       await db.collection("settings").doc("store_settings").set(data);
     }
     showToast("Settings saved! ⚙️");
-    loadPortalData();
+    await loadPortalData();
   } catch (e) {
-    showToast("Failed to save settings.", true);
+    console.error("Settings save error:", e);
+    showToast("Failed to save settings: " + (e.message || ""), true);
   } finally {
-    btn.disabled = false;
-    btn.innerHTML = "💾 Save Settings";
+    if (btn) { btn.disabled = false; btn.innerHTML = "💾 Save Settings"; }
   }
 }
