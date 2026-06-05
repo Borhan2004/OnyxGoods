@@ -1137,7 +1137,7 @@ function renderReports() {
 function renderSettings() {
   const fields = ["setLogoUrl","setContactEmail","setContactPhone","setWhatsappNumber","setDeliveryChargeDhaka","setDeliveryChargeOutside"];
   const keys   = ["logoUrl","contactEmail","contactPhone","whatsappNumber","deliveryChargeDhaka","deliveryChargeOutside"];
-  const defaults= ["logo.png","borhankustia@gmail.com","+8801998518914","8801998518914",60,120];
+  const defaults= ["logo.png","borhankustia@gmail.com","+8801302101024","8801302101024",60,120];
   fields.forEach((id, i) => {
     const el = document.getElementById(id);
     if (el) el.value = settings[keys[i]] !== undefined ? settings[keys[i]] : defaults[i];

@@ -35,7 +35,7 @@ const translations = {
     "footer-admin-link": "🔑 Admin Dashboard",
     "footer-copyright": "&copy; 2026 SHIKOR Marketplace. All rights reserved.",
     "footer-subtitle": "Village Roots, Urban Trust.",
-    "footer-whatsapp": "💬 WhatsApp: +880 1998-518914",
+    "footer-whatsapp": "💬 WhatsApp: +8801302101024",
     "footer-email": "📧 borhankustia@gmail.com",
     "footer-loc": "📍 Dhaka Office: Mirpur-10",
     "toast-cart-added": "Product added to cart!",
@@ -92,7 +92,7 @@ const translations = {
     "footer-admin-link": "🔑 অ্যাডমিন ড্যাশবোর্ড",
     "footer-copyright": "&copy; ২০২৬ SHIKOR মার্কেটপ্লেস। সর্বস্বত্ব সংরক্ষিত।",
     "footer-subtitle": "গ্রামের শেকড়, শহরের আস্থা।",
-    "footer-whatsapp": "💬 হোয়াটসঅ্যাপ: ০১৯৯৮৫১৮৯১৪",
+    "footer-whatsapp": "💬 হোয়াটসঅ্যাপ: ০১৩০২১০১০২৪",
     "footer-email": "📧 borhankustia@gmail.com",
     "footer-loc": "📍 ঢাকা অফিস: মিরপুর-১০",
     "toast-cart-added": "কার্টে পণ্য যোগ করা হয়েছে!",
@@ -206,8 +206,8 @@ function setupMockDatabase() {
     const defaultSettings = {
       logoUrl: "logo.png",
       contactEmail: "borhankustia@gmail.com",
-      contactPhone: "+8801998518914",
-      whatsappNumber: "8801998518914",
+      contactPhone: "+8801302101024",
+      whatsappNumber: "8801302101024",
       deliveryChargeDhaka: 60,
       deliveryChargeOutside: 120,
       socialLinks: { facebook: "#", instagram: "#" }
@@ -556,6 +556,10 @@ function setupNavbarScroll() {
 // User Profile loaders
 function loadLoggedUser() {
   activeUser = JSON.parse(localStorage.getItem("shikor_logged_user")) || null;
+  const banner = document.getElementById("new-user-banner");
+  if (banner && !activeUser) {
+    banner.style.display = "block";
+  }
 }
 
 /* ════════════════════════════════════════
@@ -932,6 +936,7 @@ function renderProductDetailsPage() {
     const text = prod.inStock ? translations[currentLang]["lbl-in-stock"] : translations[currentLang]["lbl-out-stock"];
     stockEl.innerText = text;
     stockEl.className = `product-stock-tag ${prod.inStock ? 'stock-in' : 'stock-out'}`;
+    stockEl.style.opacity = "1";
   }
 
   // Description
@@ -1338,7 +1343,7 @@ async function submitBillingOrder() {
 }
 
 function sendWhatsAppInvoice(order) {
-  const num = "8801998518914";
+  const num = "8801302101024";
   const displayTotal = translateNumber(order.total.toString());
   
   let msg = `Hello SHIKOR! 🌿
