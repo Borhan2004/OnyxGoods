@@ -438,15 +438,15 @@ function setLanguage(lang) {
 
   // Run place-specific translations & re-render grids
   const path = window.location.pathname;
-  if (path.includes("shop.html")) {
+  if (path.includes("shop")) {
     renderShopPage();
-  } else if (path.includes("product.html")) {
-    renderProductDetailsPage();
-  } else if (path.includes("cart.html")) {
+  } else if (path.includes("product")) {
+    if (activeProductId) renderProductDetailsPage();
+  } else if (path.includes("cart")) {
     renderCartPage();
-  } else if (path.includes("checkout.html")) {
+  } else if (path.includes("checkout")) {
     renderCheckoutPage();
-  } else if (path.includes("account.html")) {
+  } else if (path.includes("account")) {
     renderAccountPage();
   } else {
     // index.html or home
@@ -506,15 +506,16 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   // Router bindings
   const path = window.location.pathname;
-  if (path.includes("shop.html")) {
+  if (path.includes("shop")) {
     initShopPageBindings();
-  } else if (path.includes("product.html")) {
+  } else if (path.includes("product")) {
     initProductPageBindings();
-  } else if (path.includes("cart.html")) {
+    renderProductDetailsPage(); // Render after activeProductId is set
+  } else if (path.includes("cart")) {
     initCartPageBindings();
-  } else if (path.includes("checkout.html")) {
+  } else if (path.includes("checkout")) {
     initCheckoutPageBindings();
-  } else if (path.includes("account.html")) {
+  } else if (path.includes("account")) {
     initAccountPageBindings();
   } else {
     initHomepageBindings();
