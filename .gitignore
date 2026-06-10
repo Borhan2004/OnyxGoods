@@ -11,8 +11,6 @@ ui-debug.log
 # Private keys / credentials
 service-account.json
 functions/service-account.json
-.env
-.env.local
 
 # OS Metadata
 .DS_Store
@@ -54,7 +52,6 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
 
 # vercel
 .vercel
@@ -62,3 +59,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+config.bat
